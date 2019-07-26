@@ -6,9 +6,9 @@ install -s mvn:com.vaadin.external/gentyref/1.2.0.vaadin1
 install -s mvn:com.vaadin.external.gwt/gwt-elemental/2.8.2.vaadin2
 # spifly
 install -s mvn:org.apache.aries.spifly/org.apache.aries.spifly.dynamic.bundle/1.2.1
-install -s mvn:org.ow2.asm/asm/5.2
-install -s mvn:org.ow2.asm/asm-tree/5.2
-install -s mvn:org.ow2.asm/asm-commons/5.2
+install -s mvn:org.ow2.asm/asm/6.2.1
+install -s mvn:org.ow2.asm/asm-tree/6.2.1
+install -s mvn:org.ow2.asm/asm-commons/6.2.1
 install -s mvn:org.apache.aries.spifly/spifly/1.2.1
 #deps
 install -s mvn:com.helger/ph-commons/9.3.4
