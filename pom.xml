@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2018 Mike Hummel
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>de.mhus.lib</groupId>
+        <version>3.6.3-SNAPSHOT</version>
+        <artifactId>mhus-karaf</artifactId>
+    </parent>
+    <groupId>de.mhus.vaadin</groupId>
+    <artifactId>mhus-vaadin</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+  <name>MHUS Vaadin Tools</name>
+  <description>A set of tools to improve Vaadin framework</description>
+  <url>http://www.mhus.de</url>
+
+    <properties>
+        <vaadin.version>14.0.0.rc6</vaadin.version>
+        
+        <flow.version>2.0.5</flow.version>
+        <vaadin.accordion.version>1.0.3</vaadin.accordion.version>
+        <vaadin.button.version>1.3.2</vaadin.button.version>
+        <vaadin.checkbox.version>1.3.2</vaadin.checkbox.version>
+        <vaadin.combo.box.version>2.1.3</vaadin.combo.box.version>
+        <vaadin.context.menu.version>2.0.1</vaadin.context.menu.version>
+        <vaadin.date.picker.version>1.3.0</vaadin.date.picker.version>
+        <vaadin.time.picker.version>1.1.2</vaadin.time.picker.version>
+        <vaadin.details.version>1.0.1</vaadin.details.version>
+        <vaadin.dialog.version>1.3.0</vaadin.dialog.version>
+        <vaadin.select.version>1.0.0</vaadin.select.version>
+        <vaadin.form.layout.version>1.3.1</vaadin.form.layout.version>
+        <vaadin.grid.version>3.0.4</vaadin.grid.version>
+        <vaadin.icons.version>1.3.1</vaadin.icons.version>
+        <iron.list.version>1.3.0</iron.list.version>
+        <vaadin.list.box.version>1.3.0</vaadin.list.box.version>
+        <vaadin.notification.version>1.3.0</vaadin.notification.version>
+        <vaadin.ordered.layout.version>1.3.0</vaadin.ordered.layout.version>
+        <vaadin.progress.bar.version>1.3.0</vaadin.progress.bar.version>
+        <vaadin.radio.button.version>1.3.1</vaadin.radio.button.version>
+        <vaadin.split.layout.version>1.3.1</vaadin.split.layout.version>
+        <vaadin.tabs.version>1.3.0</vaadin.tabs.version>
+        <vaadin.text.field.version>1.3.0</vaadin.text.field.version>
+        <vaadin.upload.version>1.3.0</vaadin.upload.version>
+        <vaadin.custom.field.version>2.0.2</vaadin.custom.field.version>
+        <vaadin.app.layout.version>1.1.1</vaadin.app.layout.version>
+        <vaadin.login.version>1.0.0</vaadin.login.version>
+        <mpr.v7.version>1.2.1</mpr.v7.version>
+        <mpr.v8.version>1.2.1</mpr.v8.version>
+        <vaadin.board.version>2.2.1</vaadin.board.version>
+        <vaadin.charts.version>6.3.0</vaadin.charts.version>
+        <vaadin.confirm.dialog.version>1.2.1</vaadin.confirm.dialog.version>
+        <vaadin.cookie.consent.version>1.2.1</vaadin.cookie.consent.version>
+        <vaadin.crud.version>1.1.1</vaadin.crud.version>
+        <vaadin.grid.pro.version>1.0.0</vaadin.grid.pro.version>
+        <vaadin.rich.text.editor.version>1.0.1</vaadin.rich.text.editor.version>
+        <vaadin.testbench.version>6.0.1</vaadin.testbench.version>
+        <vaadin.testbench.components.version>2.0.3</vaadin.testbench.components.version>
+        
+    </properties>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <url>https://github.com/mhus/mhus-sop</url>
+    <connection>scm:git:https://github.com/mhus/mhus-sop</connection>
+  </scm>
+  <developers>
+    <developer>
+      <id>mhu</id>
+      <name>Mike Hummel</name>
+      <email>mh@mhus.de</email>
+      <url>http://www.mhus.de</url>
+    </developer>
+  </developers>
+
+    <modules>
+      <!-- 
+      <module>mhu-vaadin-shared</module>
+       -->
+      <module>mhu-vaadin-osgi</module>
+    </modules>
+
+	<repositories>
+		<repository>
+			<id>vaadin-prereleases</id>
+			<name>vaadin-prereleases</name>
+			<url>https://maven.vaadin.com/vaadin-prereleases/</url>
+			<releases></releases>
+		</repository>
+	</repositories>
+</project>
