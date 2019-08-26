@@ -33,7 +33,7 @@
   <url>http://www.mhus.de</url>
 
     <properties>
-        <vaadin.version>14.0.0.rc6</vaadin.version>
+        <vaadin.version>14.0.1</vaadin.version>
         
         <flow.version>2.0.5</flow.version>
         <vaadin.accordion.version>1.0.3</vaadin.accordion.version>

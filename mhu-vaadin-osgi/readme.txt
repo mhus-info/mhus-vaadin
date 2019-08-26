@@ -9,7 +9,7 @@ install -s mvn:org.apache.aries.spifly/org.apache.aries.spifly.dynamic.bundle/1.
 install -s mvn:org.ow2.asm/asm/6.2.1
 install -s mvn:org.ow2.asm/asm-tree/6.2.1
 install -s mvn:org.ow2.asm/asm-commons/6.2.1
-install -s mvn:org.apache.aries.spifly/spifly/1.2.1
+#install -s mvn:org.apache.aries.spifly/spifly/1.2.1
 #deps
 install -s mvn:com.helger/ph-commons/9.3.4
 install -s mvn:com.helger/ph-css/6.2.0
@@ -35,6 +35,14 @@ install -s mvn:com.vaadin/vaadin-ordered-layout-flow/2.0.0
 # app
 install -s mvn:de.mhus.vaadin/mhu-vaadin-osgi/1.0.0-SNAPSHOT
 
-http://localhost:18181/hello/
+http://localhost:8181/hello/
 
+
+
+
+docker run -it --name vaadin-flow \
+ -h flow \
+ -p 8181:8181 \
+ -v ~/.m2:/home/user/.m2 \
+ mhus/apache-karaf:4.2.6_01
 
