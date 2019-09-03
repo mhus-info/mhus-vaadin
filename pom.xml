@@ -26,13 +26,14 @@
     </parent>
     <groupId>de.mhus.vaadin</groupId>
     <artifactId>mhus-vaadin</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.6.2-SNAPSHOT</version>
     <packaging>pom</packaging>
   <name>MHUS Vaadin Tools</name>
   <description>A set of tools to improve Vaadin framework</description>
   <url>http://www.mhus.de</url>
 
     <properties>
+    <!-- 
         <vaadin.version>14.0.1</vaadin.version>
         
         <flow.version>2.0.5</flow.version>
@@ -73,7 +74,7 @@
         <vaadin.rich.text.editor.version>1.0.1</vaadin.rich.text.editor.version>
         <vaadin.testbench.version>6.0.1</vaadin.testbench.version>
         <vaadin.testbench.components.version>2.0.3</vaadin.testbench.components.version>
-        
+     -->
     </properties>
   <licenses>
     <license>
@@ -99,7 +100,9 @@
       <!-- 
       <module>mhu-vaadin-shared</module>
        -->
-      <module>mhu-vaadin-osgi</module>
+      <module>vaadin-core</module>
+      <module>vaadin-osgi-bridge</module>
+      <module>vaadin-karaf-bridge</module>
     </modules>
 
 	<repositories>
