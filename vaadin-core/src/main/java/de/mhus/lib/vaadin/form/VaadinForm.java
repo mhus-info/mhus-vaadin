@@ -30,12 +30,12 @@ public class VaadinForm extends VerticalLayout {
 
 	public enum SHOW {MODEL,YES,NO};
 	
-	private VaadinFormBuilder builder;
-	private MutableMForm form;
-	private SHOW showInformation = SHOW.MODEL;
-	private VaadinUiInformation informationPane;
-	private UiLayout layout;
-	private Panel formPanel;
+	protected VaadinFormBuilder builder;
+	protected MutableMForm form;
+	protected SHOW showInformation = SHOW.MODEL;
+	protected VaadinUiInformation informationPane;
+	protected UiLayout layout;
+	protected Panel formPanel;
 	
 	public VaadinForm() {}
 	
@@ -56,13 +56,7 @@ public class VaadinForm extends VerticalLayout {
 			form.setAdapterProvider(M.l(ActivatorAdapterProvider.class, DefaultAdapterProvider.class ) );
 
 		if (isShowInformation()) {
-			informationPane = new VaadinUiInformation();
-			form.setInformationPane(informationPane);
-			addComponent(informationPane);
-			setExpandRatio(informationPane, 0);
-			int h = form.getModel().getInt("showInformationHeight", 0);
-			informationPane.setHeight(h > 0 ? h + "px" : "100px");
-			informationPane.setWidth("100%");
+		    doBuildInformationPane();
 		}
 		if (builder == null)
 			builder = new VaadinFormBuilder();
@@ -83,7 +77,17 @@ public class VaadinForm extends VerticalLayout {
 		
 	}
 
-	public boolean isShowInformation() {
+	protected void doBuildInformationPane() {
+        informationPane = new VaadinUiInformation();
+        form.setInformationPane(informationPane);
+        addComponent(informationPane);
+        setExpandRatio(informationPane, 0);
+        int h = form.getModel().getInt("showInformationHeight", 0);
+        informationPane.setHeight(h > 0 ? h + "px" : "100px");
+        informationPane.setWidth("100%");
+    }
+
+    public boolean isShowInformation() {
 		return showInformation == SHOW.YES || showInformation == SHOW.MODEL && form != null && form.getModel() != null && form.getModel().getBoolean("showInformation", false);
 	}
 

@@ -46,6 +46,7 @@ import de.mhus.lib.core.util.MNlsBundle;
 import de.mhus.lib.core.util.MNlsProvider;
 import de.mhus.lib.form.MutableMForm;
 import de.mhus.lib.vaadin.form.VaadinPojoForm;
+import de.mhus.lib.vaadin.form.VaadinUiInformation;
 
 @SuppressWarnings("deprecation")
 public abstract class AbstractListEditor<E> extends VerticalLayout implements MNlsProvider, ILog {
@@ -142,12 +143,13 @@ public abstract class AbstractListEditor<E> extends VerticalLayout implements MN
         });
         
         detailsPanel = new Panel(getDetailsName());
-        detailsPanel.setWidth("100%");
+        detailsPanel.setSizeFull();
         detailsPanelContent = new VerticalLayout();
+        detailsPanelContent.setSizeFull();
         detailsPanel.setContent(detailsPanelContent);
         detailsPanelContent.setMargin(false);
         detailsPanelContent.setSpacing(false);
-        if (fullSize) detailsPanel.setSizeFull();
+        // if (fullSize) detailsPanel.setSizeFull();
         // detailsPanel.setScrollable(false);
         
         try {
@@ -157,9 +159,21 @@ public abstract class AbstractListEditor<E> extends VerticalLayout implements MN
                     ((MutableMForm)model.getForm()).setNlsBundle(MNlsBundle.lookup(this));
 //          model.doBuild(getActivator());
             model.doBuild();
-            detailsPanelContent.addComponent(model);
+            VaadinUiInformation info = (VaadinUiInformation)model.getForm().getInformationPane();
+            if (info != null) {
+                detailsPanelContent.addComponent(info);
+                detailsPanelContent.setExpandRatio(info, 0);
+                Panel modelPanel = new Panel();
+                modelPanel.setSizeFull();
+                modelPanel.setContent(model);
+                detailsPanelContent.addComponent(modelPanel);
+            } else {
+                detailsPanelContent.addComponent(model);
+            }
+            
             model.setMargin(false);
             model.setSpacing(false);
+            model.setWidth("100%");
         } catch (Exception e) {
             e.printStackTrace();
         }   
@@ -267,7 +281,21 @@ public abstract class AbstractListEditor<E> extends VerticalLayout implements MN
     
     protected VaadinPojoForm<E> createForm() {
         try {
-            VaadinPojoForm<E> form = new VaadinPojoForm<>(createTarget());
+            VaadinPojoForm<E> form = new VaadinPojoForm<>(createTarget()) {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                protected void doBuildInformationPane() {
+                    informationPane = new VaadinUiInformation();
+                    form.setInformationPane(informationPane);
+//                    addComponent(informationPane);
+//                    setExpandRatio(informationPane, 0);
+                    int h = form.getModel().getInt("showInformationHeight", 0);
+                    informationPane.setHeight(h > 0 ? h + "px" : "100px");
+                    informationPane.setWidth("100%");
+                }
+                
+            };
             form.setPojo(createTarget());
             return form;
         } catch (Throwable t) {
