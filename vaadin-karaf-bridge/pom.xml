@@ -54,8 +54,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>de.mhus.osgi</groupId>
-			<artifactId>mhu-osgi-vaadinbridge</artifactId>
+			<groupId>de.mhus.vaadin</groupId>
+			<artifactId>vaadin-osgi-bridge</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
