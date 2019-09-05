@@ -82,6 +82,7 @@ public abstract class AbstractListEditor<E> extends VerticalLayout implements MN
     private Log log = Log.getLog(this);
     private String sortedColumn;
     private boolean sortedAscending;
+    private VaadinUiInformation info;
     
     @SuppressWarnings("serial")
     public void initUI() {
@@ -143,10 +144,7 @@ public abstract class AbstractListEditor<E> extends VerticalLayout implements MN
         });
         
         detailsPanel = new Panel(getDetailsName());
-        detailsPanel.setSizeFull();
         detailsPanelContent = new VerticalLayout();
-        detailsPanelContent.setSizeFull();
-        detailsPanel.setContent(detailsPanelContent);
         detailsPanelContent.setMargin(false);
         detailsPanelContent.setSpacing(false);
         // if (fullSize) detailsPanel.setSizeFull();
@@ -159,17 +157,6 @@ public abstract class AbstractListEditor<E> extends VerticalLayout implements MN
                     ((MutableMForm)model.getForm()).setNlsBundle(MNlsBundle.lookup(this));
 //          model.doBuild(getActivator());
             model.doBuild();
-            VaadinUiInformation info = (VaadinUiInformation)model.getForm().getInformationPane();
-            if (info != null) {
-                detailsPanelContent.addComponent(info);
-                detailsPanelContent.setExpandRatio(info, 0);
-                Panel modelPanel = new Panel();
-                modelPanel.setSizeFull();
-                modelPanel.setContent(model);
-                detailsPanelContent.addComponent(modelPanel);
-            } else {
-                detailsPanelContent.addComponent(model);
-            }
             
             model.setMargin(false);
             model.setSpacing(false);
@@ -216,9 +203,39 @@ public abstract class AbstractListEditor<E> extends VerticalLayout implements MN
 
         
         editMode = null;
-        
-        createCustomButtons(buttonBar);
-        composeElements(filter, table, detailsPanel, buttonBar );
+
+        detailsPanel.setContent(detailsPanelContent);
+        detailsPanelContent.addComponent(model);
+
+        info = (VaadinUiInformation)model.getForm().getInformationPane();
+        if (info != null) {
+            
+            detailsPanel.setSizeFull();
+            detailsPanelContent.setWidth("100%");
+            VerticalLayout content = new VerticalLayout();
+            content.setSizeFull();
+            content.setMargin(false);
+            content.setSpacing(false);
+            
+            content.addComponent(info);
+            content.setExpandRatio(info, 0);
+            
+            content.addComponent(detailsPanel);
+            content.setExpandRatio(detailsPanel,1);
+            
+            createCustomButtons(buttonBar);
+            composeElements(filter, table, content, buttonBar );
+            info.setVisible(false);
+        } else {
+            detailsPanel.setSizeFull();
+            detailsPanelContent.setSizeFull();
+            detailsPanel.setContent(detailsPanelContent);
+            detailsPanelContent.addComponent(model);
+            
+            createCustomButtons(buttonBar);
+            composeElements(filter, table, detailsPanel, buttonBar );
+        }
+
         
         updateEnabled();
 
@@ -485,6 +502,8 @@ public abstract class AbstractListEditor<E> extends VerticalLayout implements MN
         Object selectedId = table.getValue();
         
         if (!isEditMode()) {
+            if (info != null)
+                info.setVisible(false);
             bNew.setEnabled(canNew());
             bNew.setCaption(MNls.find(this, "button.create=Create"));
             bUpdate.setEnabled(selectedId != null && canUpdate(selectedId) );
@@ -494,6 +513,8 @@ public abstract class AbstractListEditor<E> extends VerticalLayout implements MN
             if (model != null) model.setEnabled(false);
             table.setEnabled(true);
         } else {
+            if (info != null)
+                info.setVisible(true);
             bNew.setEnabled(false);
             bNew.setCaption(MNls.find(this, "button.create=Create"));
             bUpdate.setEnabled(true);
