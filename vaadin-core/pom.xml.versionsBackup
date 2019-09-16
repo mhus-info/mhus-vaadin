@@ -24,7 +24,7 @@
     <parent>
         <artifactId>mhus-vaadin</artifactId>
         <groupId>de.mhus.vaadin</groupId>
-        <version>1.6.2</version>
+        <version>1.6.2-SNAPSHOT</version>
     </parent>
   
   <build>
