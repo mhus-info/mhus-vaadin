@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2018 Mike Hummel
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<features name="${project.artifactId}-${project.version}"
+	xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
+
+	<feature name='vaadin-core' description='Development environment' version='${project.version}'>
+		<bundle>mvn:org.hsqldb/hsqldb/${hsqldb.version}</bundle>
+		<feature>cherry-vault</feature>
+        <feature>cherry-vault-rest</feature>
+	</feature>
+
+    <feature name='cherry-vault-rest' description='cherry-vault-rest' version='${project.version}'>
+        <details>${project.description}</details>
+        <feature>http</feature>
+        <feature>http-whiteboard</feature>
+
+        <bundle>mvn:javax.xml.rpc/javax.xml.rpc-api/${javax.xml.rpc.version}</bundle>
+
+        <bundle>mvn:de.mhus.osgi/mhu-sop-rest/${mhus-sop.version}</bundle>
+        <bundle>mvn:de.mhus.cherry.vault/vault-rest/${cherry-vault.version}</bundle>
+	</feature>
+	
+	<feature name='cherry-vault' description='cherry-vault' version='${project.version}'>
+		<details>${project.description}</details>
+		
+		<feature>scr</feature>
+		<feature>jdbc</feature>
+		<feature>openjpa</feature>
+		<feature>jndi</feature>
+		<feature>activemq-client</feature>
+
+		<!-- mhu-lib -->
+		
+        <bundle>mvn:commons-codec/commons-codec/${commons-codec.version}</bundle>
+        <bundle>mvn:org.jsoup/jsoup/${org.jsoup.version}</bundle>
+        <bundle>mvn:mysql/mysql-connector-java/${mysql.version}</bundle>
+		
+        <bundle>mvn:org.apache.commons/commons-jexl/${commons-jexl.version}</bundle>
+        <bundle><![CDATA[wrap:mvn:org.w3c.css/sac/${w3c.css.sac}/$Bundle-SymbolicName=sac&Bundle-Version=${w3c.css.sac}&Export-Package=org.w3c.css.sac;version="${w3c.css.sac}",!*]]></bundle>
+
+        <bundle>mvn:org.codehaus.jackson/jackson-core-asl/${jackson.asl.version}</bundle>
+        <bundle>mvn:org.codehaus.jackson/jackson-mapper-asl/${jackson.asl.version}</bundle>
+        <bundle><![CDATA[wrap:mvn:org.apache.commons/commons-io/${commons-io.version}/$Bundle-SymbolicName=commons-io&Bundle-Version=${commons-io.version}&Export-Package=org.apache.commons.io;version="${commons-io.version}",!*]]></bundle>
+
+        <bundle>mvn:de.mhus.lib/mhu-lib-annotations/${mhus-lib.version}</bundle>
+        <bundle>mvn:de.mhus.lib/mhu-lib-core/${mhus-lib.version}</bundle>
+        <bundle>mvn:de.mhus.lib/mhu-lib-persistence/${mhus-lib.version}</bundle>
+        <bundle>mvn:de.mhus.lib/mhu-lib-jms/${mhus-lib.version}</bundle>
+
+		<!-- osgi tools -->
+		
+        <bundle>mvn:org.bouncycastle/bcprov-jdk16/${bouncycastle.version}</bundle>
+		
+        <bundle>mvn:de.mhus.osgi/mhu-osgi-api/${mhus-osgi-tools.version}</bundle>
+        <bundle>mvn:de.mhus.osgi/mhu-osgi-services/${mhus-osgi-tools.version}</bundle>
+        <bundle>mvn:de.mhus.osgi/mhu-karaf-commands/${mhus-osgi-tools.version}</bundle>
+        <bundle>mvn:de.mhus.osgi/mhu-karaf-xdb/${mhus-osgi-tools.version}</bundle>
+
+
+<!--
+		<bundle>mvn:org.mongodb/mongo-java-driver/${mongo.version}</bundle>
+    	<bundle>wrap:mvn:com.thoughtworks.proxytoys/proxytoys/1.0</bundle>
+    	<bundle>mvn:org.mongodb.morphia/morphia/${mongo.morphia.version}</bundle>	
+		<bundle>mvn:de.mhus.osgi/mhu-karaf-mongo/${osgitools.version}</bundle>
+-->		
+		<bundle>mvn:de.mhus.osgi/mhu-osgi-crypt-api/${mhus-crypt.version}</bundle>
+		<bundle>mvn:de.mhus.osgi/mhu-osgi-crypt-bc/${mhus-crypt.version}</bundle>
+		<bundle>mvn:de.mhus.osgi/mhu-karaf-crypt/${mhus-crypt.version}</bundle>
+		
+		<!-- sop -->
+
+        <bundle>mvn:org.apache.httpcomponents/httpcore-osgi/${httpcomponents.httpcore.version}</bundle>
+		
+		<bundle>mvn:de.mhus.osgi/mhu-sop-api/${mhus-sop.version}</bundle>
+		<bundle>mvn:de.mhus.osgi/mhu-sop-core/${mhus-sop.version}</bundle>
+		
+		<!-- vault -->
+		
+		<bundle>mvn:de.mhus.cherry.vault/vault-api/${cherry-vault.version}</bundle>
+		<bundle>mvn:de.mhus.cherry.vault/vault-core/${cherry-vault.version}</bundle>
+		
+	</feature>
+		
+</features>
