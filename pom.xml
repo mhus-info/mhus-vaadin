@@ -21,18 +21,19 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>de.mhus.lib</groupId>
-        <version>6.4.0</version>
+        <version>6.4.1-SNAPSHOT</version>
         <artifactId>mhus-karaf</artifactId>
     </parent>
     <groupId>de.mhus.vaadin</groupId>
     <artifactId>mhus-vaadin</artifactId>
-    <version>6.3.0</version>
+    <version>6.3.1-SNAPSHOT</version>
     <packaging>pom</packaging>
   <name>MHUS Vaadin Tools</name>
   <description>A set of tools to improve Vaadin framework</description>
   <url>http://www.mhus.de</url>
 
     <properties>
+        <mhus-vaadin.version>${project.version}</mhus-vaadin.version>
     <!-- 
         <vaadin.version>14.0.1</vaadin.version>
         
