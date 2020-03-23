@@ -13,28 +13,28 @@
  */
 package de.mhus.osgi.sop.vaadin.desktop;
 
+import org.apache.shiro.subject.Subject;
+
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 
 import de.mhus.lib.core.M;
 import de.mhus.lib.core.MLog;
-import de.mhus.lib.core.logging.MLogUtil;
-import de.mhus.lib.core.security.AaaContext;
-import de.mhus.lib.core.security.AccessApi;
 import de.mhus.lib.core.security.AccessControl;
 import de.mhus.lib.core.security.Account;
-import de.mhus.lib.errors.MException;
+import de.mhus.lib.core.shiro.ShiroAccount;
+import de.mhus.lib.core.shiro.ShiroSecurity;
+import de.mhus.lib.core.shiro.ShiroUtil;
 
 public class VaadinSopAccessControl extends MLog implements AccessControl {
 
-    private static final String ATTR_TICKET = "_access_ticket";
-    private static final String ATTR_NAME = "_access_name";
+    public static final String ATTR_SUBJECT = "_access_subject";
+    public static final String ATTR_NAME = "_access_name";
+    public static final String ATTR_CONTEXT = "_access_context";
     private VaadinSession session;
-    private AccessApi aaa;
 
     public VaadinSopAccessControl() {
         session = UI.getCurrent().getSession();
-        aaa = M.l(AccessApi.class);
     }
 
     @Override
@@ -54,11 +54,11 @@ public class VaadinSopAccessControl extends MLog implements AccessControl {
     @Override
     public boolean signIn(String username, String password) {
 
-        String ticket = aaa.createUserTicket(username, password);
         try {
-            AaaContext context = aaa.process(ticket, session.getLocale());
-            aaa.release(context);
-            session.setAttribute(ATTR_TICKET, ticket);
+            Subject subject = M.l(ShiroSecurity.class).createSubject();
+            if (!ShiroUtil.login(subject, username, password, session.getLocale()))
+                return false;
+            session.setAttribute(ATTR_SUBJECT, subject);
             session.setAttribute(ATTR_NAME, username);
             return true;
         } catch (Throwable t) {
@@ -69,25 +69,27 @@ public class VaadinSopAccessControl extends MLog implements AccessControl {
 
     @Override
     public boolean isUserSignedIn() {
-        return session.getAttribute(ATTR_TICKET) != null;
+        return session.getAttribute(ATTR_SUBJECT) != null;
     }
 
     @Override
     public void signOut() {
         session.setAttribute(ATTR_NAME, null);
-        session.setAttribute(ATTR_TICKET, null);
+        Subject subject = (Subject)session.getAttribute(ATTR_SUBJECT);
+        session.setAttribute(ATTR_SUBJECT, null);
+        if (subject != null) {
+            try {
+                subject.logout();
+            } catch (Throwable t) {}
+        }
     }
 
     @Override
     public Account getAccount() {
-        String account = (String) session.getAttribute(ATTR_NAME);
-        if (account == null) return null;
-        try {
-            return aaa.getAccount(account);
-        } catch (MException e) {
-            log().w(account, e);
-            return null;
-        }
+        // String account = (String) session.getAttribute(ATTR_NAME);
+        Subject subject = (Subject)session.getAttribute(ATTR_SUBJECT);
+        if (subject == null) return null;
+        return new ShiroAccount(subject);
     }
 
     public static String getUserName(VaadinSession session) {
@@ -97,14 +99,8 @@ public class VaadinSopAccessControl extends MLog implements AccessControl {
     }
 
     public static Account getUserAccount(VaadinSession session) {
-        String account = (String) session.getAttribute(ATTR_NAME);
-        if (account == null) return null;
-        try {
-            AccessApi aaa = M.l(AccessApi.class);
-            return aaa.getAccount(account);
-        } catch (MException e) {
-            MLogUtil.log().w(account, e);
-            return null;
-        }
+        Subject subject = (Subject)session.getAttribute(ATTR_SUBJECT);
+        if (subject == null) return null;
+        return new ShiroAccount(subject);
     }
 }

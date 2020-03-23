@@ -16,6 +16,7 @@ package de.mhus.osgi.sop.vaadin.desktop;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.shiro.subject.Subject;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -25,22 +26,20 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-import de.mhus.lib.core.M;
-import de.mhus.lib.core.MFile;
 import de.mhus.lib.core.MString;
 import de.mhus.lib.core.cfg.CfgBoolean;
-import de.mhus.lib.core.logging.Log;
 import de.mhus.lib.core.logging.MLogUtil;
-import de.mhus.lib.core.security.AaaContext;
-import de.mhus.lib.core.security.AccessApi;
 import de.mhus.lib.core.security.AccessControl;
 import de.mhus.lib.core.security.Account;
+import de.mhus.lib.core.shiro.ShiroUtil;
+import de.mhus.lib.core.shiro.SubjectEnvironment;
 import de.mhus.lib.vaadin.desktop.Desktop;
 import de.mhus.lib.vaadin.desktop.GuiSpace;
 import de.mhus.lib.vaadin.desktop.GuiSpaceService;
@@ -59,7 +58,7 @@ public class SopUi extends UI implements SopUiApi {
     private static final long serialVersionUID = 1L;
 
     //	private static CfgString CFG_REALM = new CfgString(SopUi.class, "realm", "karaf");
-    private static Log log = Log.getLog(SopUi.class);
+//    private static Log log = Log.getLog(SopUi.class);
     private Desktop desktop;
     private AccessControl accessControl;
     private ServiceTracker<GuiSpaceService, GuiSpaceService> spaceTracker;
@@ -292,42 +291,14 @@ public class SopUi extends UI implements SopUiApi {
     public boolean hasAccess(String role) {
         if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return false;
 
-        try {
-            AccessApi aaa = M.l(AccessApi.class);
-            Account account = aaa.getCurrentAccount();
-            return aaa.hasResourceAccess(
-                    account,
-                    GuiSpace.class.getCanonicalName(),
-                    MFile.normalize(role.trim()).toLowerCase(),
-                    "access",
-                    null);
-        } catch (Throwable t) {
-            log.d(role, t);
-        }
-        return false;
+        return ShiroUtil.isPermitted(GuiSpace.class.getCanonicalName(), "access", role.trim().toLowerCase());
     }
 
     @Override
     public boolean hasWriteAccess(String role) {
         if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return false;
 
-        try {
-            try {
-                AccessApi aaa = M.l(AccessApi.class);
-                Account account = aaa.getCurrentAccount();
-                return aaa.hasResourceAccess(
-                        account,
-                        GuiSpace.class.getCanonicalName(),
-                        MFile.normalize(role.trim()).toLowerCase(),
-                        "write",
-                        null);
-            } catch (Throwable t) {
-                log.d(role, t);
-            }
-        } catch (Throwable t) {
-            log.d(role, t);
-        }
-        return false;
+        return ShiroUtil.isPermitted(GuiSpace.class.getCanonicalName(), "write", role.toLowerCase());
     }
 
     public Account getCurrentUser() {
@@ -342,17 +313,22 @@ public class SopUi extends UI implements SopUiApi {
     public void requestBegin() {
         if (trailConfig != null) MLogUtil.setTrailConfig(MLogUtil.TRAIL_SOURCE_UI, trailConfig);
         else MLogUtil.releaseTrailConfig();
-        AccessApi aaa = M.l(AccessApi.class);
-        AaaContext acontext = aaa.processUserSession(getCurrentUserName(), Locale.getDefault());
-        getSession().setAttribute("_aaacontext", acontext);
+        
+        VaadinSession session = getSession();
+        Subject subject = (Subject)session.getAttribute(VaadinSopAccessControl.ATTR_SUBJECT);
+        
+        SubjectEnvironment env = ShiroUtil.useSubject(subject);
+        session.setAttribute(VaadinSopAccessControl.ATTR_CONTEXT, env);
     }
 
     public void requestEnd() {
-        AccessApi aaa = M.l(AccessApi.class);
-
-        //		AaaContext acontext = (AaaContext) getSession().getAttribute("_aaacontext");
-        aaa.resetContext();
-
+        
+        VaadinSession session = getSession();
+        SubjectEnvironment env = (SubjectEnvironment) session.getAttribute(VaadinSopAccessControl.ATTR_CONTEXT);
+        if (env != null) {
+            session.setAttribute(VaadinSopAccessControl.ATTR_CONTEXT, null);
+            env.close();
+        }
         MLogUtil.releaseTrailConfig();
     }
 
