@@ -56,10 +56,14 @@ public class VaadinSopAccessControl extends MLog implements AccessControl {
 
         try {
             Subject subject = M.l(ShiroSecurity.class).createSubject();
-            if (!ShiroUtil.login(subject, username, password, session.getLocale()))
+            if (!ShiroUtil.login(subject, username, password, true, session.getLocale()))
                 return false;
             session.setAttribute(ATTR_SUBJECT, subject);
             session.setAttribute(ATTR_NAME, username);
+            
+            // need to set subject session NOW
+            SopUi.subjectSet(session);
+
             return true;
         } catch (Throwable t) {
             log().w(username, t);
@@ -82,6 +86,8 @@ public class VaadinSopAccessControl extends MLog implements AccessControl {
                 subject.logout();
             } catch (Throwable t) {}
         }
+        // remove subject session
+        SopUi.subjectRemove(session);
     }
 
     @Override

@@ -314,23 +314,31 @@ public class SopUi extends UI implements SopUiApi {
         if (trailConfig != null) MLogUtil.setTrailConfig(MLogUtil.TRAIL_SOURCE_UI, trailConfig);
         else MLogUtil.releaseTrailConfig();
         
-        VaadinSession session = getSession();
-        Subject subject = (Subject)session.getAttribute(VaadinSopAccessControl.ATTR_SUBJECT);
-        
-        SubjectEnvironment env = ShiroUtil.useSubject(subject);
-        session.setAttribute(VaadinSopAccessControl.ATTR_CONTEXT, env);
+        subjectSet(getSession());
     }
 
     public void requestEnd() {
         
-        VaadinSession session = getSession();
+        subjectRemove(getSession());
+        MLogUtil.releaseTrailConfig();
+    }
+    
+    protected static void subjectSet(VaadinSession session) {
+        Subject subject = (Subject)session.getAttribute(VaadinSopAccessControl.ATTR_SUBJECT);
+        if (subject != null) {
+            SubjectEnvironment env = ShiroUtil.useSubject(subject);
+            session.setAttribute(VaadinSopAccessControl.ATTR_CONTEXT, env);
+        }
+    }
+    
+    protected static void subjectRemove(VaadinSession session) {
         SubjectEnvironment env = (SubjectEnvironment) session.getAttribute(VaadinSopAccessControl.ATTR_CONTEXT);
         if (env != null) {
             session.setAttribute(VaadinSopAccessControl.ATTR_CONTEXT, null);
             env.close();
         }
-        MLogUtil.releaseTrailConfig();
     }
+    
 
     public String getTrailConfig() {
         return trailConfig;
