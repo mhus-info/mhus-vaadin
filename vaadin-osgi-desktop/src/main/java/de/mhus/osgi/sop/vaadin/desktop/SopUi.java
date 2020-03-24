@@ -38,7 +38,7 @@ import de.mhus.lib.core.cfg.CfgBoolean;
 import de.mhus.lib.core.logging.MLogUtil;
 import de.mhus.lib.core.security.AccessControl;
 import de.mhus.lib.core.security.Account;
-import de.mhus.lib.core.shiro.ShiroUtil;
+import de.mhus.lib.core.shiro.AccessUtil;
 import de.mhus.lib.core.shiro.SubjectEnvironment;
 import de.mhus.lib.vaadin.desktop.Desktop;
 import de.mhus.lib.vaadin.desktop.GuiSpace;
@@ -291,14 +291,14 @@ public class SopUi extends UI implements SopUiApi {
     public boolean hasAccess(String role) {
         if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return false;
 
-        return ShiroUtil.isPermitted(GuiSpace.class.getCanonicalName(), "access", role.trim().toLowerCase());
+        return AccessUtil.isPermitted(GuiSpace.class.getCanonicalName(), "access", role.trim().toLowerCase());
     }
 
     @Override
     public boolean hasWriteAccess(String role) {
         if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return false;
 
-        return ShiroUtil.isPermitted(GuiSpace.class.getCanonicalName(), "write", role.toLowerCase());
+        return AccessUtil.isPermitted(GuiSpace.class.getCanonicalName(), "write", role.toLowerCase());
     }
 
     public Account getCurrentUser() {
@@ -326,7 +326,7 @@ public class SopUi extends UI implements SopUiApi {
     protected static void subjectSet(VaadinSession session) {
         Subject subject = (Subject)session.getAttribute(VaadinSopAccessControl.ATTR_SUBJECT);
         if (subject != null) {
-            SubjectEnvironment env = ShiroUtil.useSubject(subject);
+            SubjectEnvironment env = AccessUtil.useSubject(subject);
             session.setAttribute(VaadinSopAccessControl.ATTR_CONTEXT, env);
         }
     }

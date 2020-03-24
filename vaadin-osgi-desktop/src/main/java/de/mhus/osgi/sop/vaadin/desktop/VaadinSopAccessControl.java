@@ -23,8 +23,8 @@ import de.mhus.lib.core.MLog;
 import de.mhus.lib.core.security.AccessControl;
 import de.mhus.lib.core.security.Account;
 import de.mhus.lib.core.shiro.ShiroAccount;
-import de.mhus.lib.core.shiro.ShiroSecurity;
-import de.mhus.lib.core.shiro.ShiroUtil;
+import de.mhus.lib.core.shiro.AccessApi;
+import de.mhus.lib.core.shiro.AccessUtil;
 
 public class VaadinSopAccessControl extends MLog implements AccessControl {
 
@@ -55,8 +55,8 @@ public class VaadinSopAccessControl extends MLog implements AccessControl {
     public boolean signIn(String username, String password) {
 
         try {
-            Subject subject = M.l(ShiroSecurity.class).createSubject();
-            if (!ShiroUtil.login(subject, username, password, true, session.getLocale()))
+            Subject subject = M.l(AccessApi.class).createSubject();
+            if (!AccessUtil.login(subject, username, password, true, session.getLocale()))
                 return false;
             session.setAttribute(ATTR_SUBJECT, subject);
             session.setAttribute(ATTR_NAME, username);
