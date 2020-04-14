@@ -18,7 +18,6 @@ import java.util.Map;
 
 import de.mhus.lib.core.MLog;
 import de.mhus.lib.core.config.IConfig;
-import de.mhus.lib.core.directory.ResourceNode;
 import de.mhus.lib.form.IUiBuilder;
 import de.mhus.lib.form.MForm;
 import de.mhus.lib.form.UiComponent;
@@ -50,7 +49,7 @@ public class VaadinFormBuilder extends MLog implements IUiBuilder {
 
     private void build(UiLayout layout, IConfig model) throws Exception {
 
-        for (ResourceNode<?> node : model.getNodes()) {
+        for (IConfig node : model.getObjects()) {
             String name = node.getName();
             if (name.equals("element")) name = node.getString("type");
 

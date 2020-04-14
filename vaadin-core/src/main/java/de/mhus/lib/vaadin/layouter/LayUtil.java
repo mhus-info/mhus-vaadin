@@ -21,7 +21,7 @@ import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractSplitPanel;
 import com.vaadin.ui.Layout;
 
-import de.mhus.lib.core.directory.ResourceNode;
+import de.mhus.lib.core.config.IConfig;
 import de.mhus.lib.errors.MException;
 
 public class LayUtil {
@@ -29,7 +29,7 @@ public class LayUtil {
     private static final Pattern sizePattern =
             Pattern.compile("^(-?\\d+(\\.\\d+)?)(%|px|em|ex|in|cm|mm|pt|pc)?$");
 
-    public static void configure(AbstractComponent layout, ResourceNode<?> config)
+    public static void configure(AbstractComponent layout, IConfig config)
             throws MException {
         if (config.getBoolean(LayoutBuilder.FULL_SIZE, false)) layout.setSizeFull();
         else {

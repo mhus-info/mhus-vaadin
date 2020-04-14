@@ -54,7 +54,7 @@ public class DefaultAdapterProvider extends ActivatorAdapterProvider {
         IConfig cfg = MApi.getCfg(DefaultAdapterProvider.class, null);
         if (cfg != null) {
             MActivator from = MApi.get().createActivator();
-            for (IConfig mapping : cfg.getNodes("adapter")) {
+            for (IConfig mapping : cfg.getObjectList("adapter")) {
                 try {
                     String name = mapping.getString("name");
                     String className = mapping.getString("class");

@@ -49,7 +49,7 @@ public class LayoutBuilder extends MObject {
     public LayoutBuilder doBuild(IConfig layout) throws Exception {
 
         if (layout.getName().equals(DefRoot.ROOT))
-            layout = layout.getNode("layout").getNodes().iterator().next();
+            layout = layout.getObjectList("layout").iterator().next();
 
         XLayElement root = getActivator().createObject(XLayElement.class, layout.getName());
         root.setConfig(layout);
@@ -65,10 +65,10 @@ public class LayoutBuilder extends MObject {
     }
 
     protected void build(XLayElement parent, IConfig layout) throws Exception {
-        IConfig layoutLayout = layout.getNode("layout");
+        IConfig layoutLayout = layout.getObject("layout");
         if (layoutLayout == null) return;
 
-        for (IConfig cChild : layoutLayout.getNodes()) {
+        for (IConfig cChild : layoutLayout.getObjects()) {
             XLayElement child = getActivator().createObject(XLayElement.class, cChild.getName());
             parent.doAppendChild(child, cChild);
             child.setConfig(cChild);

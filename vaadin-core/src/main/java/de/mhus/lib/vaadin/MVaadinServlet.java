@@ -22,10 +22,11 @@ import javax.servlet.ServletException;
 
 import com.vaadin.server.VaadinServlet;
 
+import de.mhus.lib.core.M;
 import de.mhus.lib.core.MSystem;
-import de.mhus.lib.core.config.HashConfig;
+import de.mhus.lib.core.config.IConfig;
+import de.mhus.lib.core.config.IConfigFactory;
 import de.mhus.lib.core.config.MConfig;
-import de.mhus.lib.core.directory.ResourceNode;
 import de.mhus.lib.core.logging.Log;
 
 public class MVaadinServlet extends VaadinServlet {
@@ -35,7 +36,7 @@ public class MVaadinServlet extends VaadinServlet {
 
     private static Log log = Log.getLog(MVaadinServlet.class);
 
-    private ResourceNode<?> config;
+    private IConfig config;
 
     @Override
     public void init() throws ServletException {
@@ -59,11 +60,11 @@ public class MVaadinServlet extends VaadinServlet {
             }
         if (mhusConfigUrl != null)
             try {
-                config = MConfig.createConfigFor(mhusConfigUrl.toURI());
+                config = M.l(IConfigFactory.class).read(mhusConfigUrl.toURI().toURL());
             } catch (Exception e) {
                 log.i(mhusConfigPath, e);
             }
-        else config = new HashConfig();
+        else config = new MConfig();
 
         doInit();
     }
@@ -75,7 +76,7 @@ public class MVaadinServlet extends VaadinServlet {
         return "config.xml";
     }
 
-    public ResourceNode<?> getConfig() {
+    public IConfig getConfig() {
         return config;
     }
 
