@@ -22,8 +22,8 @@ import java.util.TreeMap;
 import java.util.UUID;
 
 import de.mhus.lib.annotations.vaadin.Column;
+import de.mhus.lib.core.IProperties;
 import de.mhus.lib.core.MCollection;
-import de.mhus.lib.core.MProperties;
 import de.mhus.lib.core.MString;
 import de.mhus.lib.core.logging.Log;
 import de.mhus.lib.core.pojo.PojoAttribute;
@@ -78,7 +78,7 @@ public abstract class AbstractBeanListEditor<E> extends AbstractListEditor<E> {
 
     private Properties createProperties(Column columnDef) {
         if (columnDef.properties() == null || columnDef.properties().length == 0) return null;
-        return MProperties.explodeToProperties(columnDef.properties());
+        return IProperties.explodeToProperties(columnDef.properties());
     }
 
     @Override
