@@ -35,8 +35,8 @@ import com.vaadin.v7.ui.TableFieldFactory;
 import com.vaadin.v7.ui.TextField;
 
 import de.mhus.lib.core.MCollection;
-import de.mhus.lib.core.lang.DateTime;
 import de.mhus.lib.core.logging.Log;
+import de.mhus.lib.core.util.DateTime;
 import de.mhus.lib.vaadin.converter.BooleanPrimitiveConverter;
 import de.mhus.lib.vaadin.converter.DateConverter;
 import de.mhus.lib.vaadin.converter.DateTimeConverter;

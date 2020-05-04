@@ -20,7 +20,7 @@ import de.mhus.lib.core.M;
 import de.mhus.lib.core.activator.MutableActivator;
 import de.mhus.lib.core.config.IConfig;
 import de.mhus.lib.core.definition.DefRoot;
-import de.mhus.lib.core.lang.MObject;
+import de.mhus.lib.core.util.MObject;
 
 public class LayoutBuilder extends MObject {
 

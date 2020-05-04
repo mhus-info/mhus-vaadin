@@ -19,7 +19,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
-import de.mhus.lib.core.lang.IObserver;
+import de.mhus.lib.core.util.IObserver;
 import de.mhus.lib.vaadin.SectionsSelector.Section;
 
 public abstract class AbstractSectionsPanel extends HorizontalLayout
