@@ -49,7 +49,7 @@ public class VaadinFormBuilder extends MLog implements IUiBuilder {
 
     private void build(UiLayout layout, IConfig model) throws Exception {
 
-        for (IConfig node : model.getObjects()) {
+        for (IConfig node : model.getArrayOrCreate(IConfig.NAMELESS_VALUE)) {
             String name = node.getName();
             if (name.equals("element")) name = node.getString("type");
 

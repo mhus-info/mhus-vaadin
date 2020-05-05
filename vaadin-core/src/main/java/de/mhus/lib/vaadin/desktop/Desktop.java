@@ -272,7 +272,7 @@ public class Desktop extends CssLayout implements MNlsProvider {
         try {
             locale = UI.getCurrent().getPage().getWebBrowser().getLocale();
         } catch (Throwable t) {
-            log.i(t);
+            log.d(t);
             locale = Locale.getDefault();
         }
 

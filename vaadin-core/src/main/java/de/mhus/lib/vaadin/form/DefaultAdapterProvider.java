@@ -51,6 +51,32 @@ public class DefaultAdapterProvider extends ActivatorAdapterProvider {
         DefaultActivator a = new DefaultActivator();
         activator = a;
 
+        // default config
+        a.addMap("text", UiText.Adapter.class);
+        a.addMap("checkbox", UiCheckbox.Adapter.class);
+        a.addMap("date", UiDate.Adapter.class);
+        a.addMap("password", UiPassword.Adapter.class);
+        a.addMap("number", UiNumber.Adapter.class);
+        a.addMap("textarea", UiTextArea.Adapter.class);
+        a.addMap("richtext", UiRichTextArea.Adapter.class);
+        a.addMap("combobox", UiCombobox.Adapter.class);
+        a.addMap("layout100", UiLayout100.Adapter.class);
+        a.addMap("layout50x50", UiLayout2x50.Adapter.class);
+        a.addMap("layout33x33x33", UiLayout3x33.Adapter.class);
+        a.addMap("layout25x25x25x25", UiLayout4x25.Adapter.class);
+        a.addMap("layouttabs", UiLayoutTabs.Adapter.class);
+        a.addMap("layoutwizard", UiLayoutWizard.Adapter.class);
+        a.addMap("100", UiLayout100.Adapter.class);
+        a.addMap("50x50", UiLayout2x50.Adapter.class);
+        a.addMap("tabs", UiLayoutTabs.Adapter.class);
+        a.addMap("options", UiOptions.Adapter.class);
+        a.addMap("layoutpanel", UiPanel.Adapter.class);
+        a.addMap("panel", UiPanel.Adapter.class);
+        a.addMap("link", UiLink.Adapter.class);
+        a.addMap("label", UiLabel.Adapter.class);
+        a.addMap("action", UiAction.Adapter.class);
+        a.addMap("void", UiVoid.Adapter.class);
+
         IConfig cfg = MApi.getCfg(DefaultAdapterProvider.class, null);
         if (cfg != null) {
             MActivator from = MApi.get().createActivator();
@@ -65,31 +91,7 @@ public class DefaultAdapterProvider extends ActivatorAdapterProvider {
                 }
             }
         } else {
-            // default config
-            a.addMap("text", UiText.Adapter.class);
-            a.addMap("checkbox", UiCheckbox.Adapter.class);
-            a.addMap("date", UiDate.Adapter.class);
-            a.addMap("password", UiPassword.Adapter.class);
-            a.addMap("number", UiNumber.Adapter.class);
-            a.addMap("textarea", UiTextArea.Adapter.class);
-            a.addMap("richtext", UiRichTextArea.Adapter.class);
-            a.addMap("combobox", UiCombobox.Adapter.class);
-            a.addMap("layout100", UiLayout100.Adapter.class);
-            a.addMap("layout50x50", UiLayout2x50.Adapter.class);
-            a.addMap("layout33x33x33", UiLayout3x33.Adapter.class);
-            a.addMap("layout25x25x25x25", UiLayout4x25.Adapter.class);
-            a.addMap("layouttabs", UiLayoutTabs.Adapter.class);
-            a.addMap("layoutwizard", UiLayoutWizard.Adapter.class);
-            a.addMap("100", UiLayout100.Adapter.class);
-            a.addMap("50x50", UiLayout2x50.Adapter.class);
-            a.addMap("tabs", UiLayoutTabs.Adapter.class);
-            a.addMap("options", UiOptions.Adapter.class);
-            a.addMap("layoutpanel", UiPanel.Adapter.class);
-            a.addMap("panel", UiPanel.Adapter.class);
-            a.addMap("link", UiLink.Adapter.class);
-            a.addMap("label", UiLabel.Adapter.class);
-            a.addMap("action", UiAction.Adapter.class);
-            a.addMap("void", UiVoid.Adapter.class);
+
         }
     }
 }
