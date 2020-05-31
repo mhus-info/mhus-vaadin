@@ -15,6 +15,9 @@ package de.mhus.osgi.sop.vaadin.desktop;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.subject.Subject;
 import org.osgi.framework.BundleContext;
@@ -35,7 +38,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import de.mhus.lib.core.MString;
 import de.mhus.lib.core.cfg.CfgBoolean;
-import de.mhus.lib.core.logging.MLogUtil;
+import de.mhus.lib.core.logging.ITracer;
 import de.mhus.lib.core.security.AccessControl;
 import de.mhus.lib.core.security.Account;
 import de.mhus.lib.core.shiro.AccessUtil;
@@ -44,6 +47,7 @@ import de.mhus.lib.vaadin.desktop.Desktop;
 import de.mhus.lib.vaadin.desktop.GuiSpace;
 import de.mhus.lib.vaadin.desktop.GuiSpaceService;
 import de.mhus.lib.vaadin.login.LoginScreen;
+import io.opentracing.Scope;
 
 @Theme("soptheme")
 // @Widgetset("de.mhus.osgi.sop.vaadin.theme.SopWidgetset")
@@ -51,6 +55,7 @@ import de.mhus.lib.vaadin.login.LoginScreen;
 public class SopUi extends UI implements SopUiApi {
 
     private static CfgBoolean CFG_GEEK_MODE = new CfgBoolean(SopUiApi.class, "geek", false);
+    private static CfgBoolean CFG_TRACE_ACTIVE = new CfgBoolean(SopUi.class, "traceActive", false);
 
     // https://ccsearch.creativecommons.org/image/detail/pugDQPO07WYrRd52PHD68Q==
     // "cross process=loves" by Vivianna_love is licensed under CC BY 2.0
@@ -63,7 +68,7 @@ public class SopUi extends UI implements SopUiApi {
     private AccessControl accessControl;
     private ServiceTracker<GuiSpaceService, GuiSpaceService> spaceTracker;
     private BundleContext context;
-    private String trailConfig = null;
+    private String tracerId = null;
 
     private String startNav;
     private String host;
@@ -124,14 +129,14 @@ public class SopUi extends UI implements SopUiApi {
 
                                             @Override
                                             public void menuSelected(MenuItem selectedItem) {
-                                                if (getTrailConfig() == null) {
-                                                    setTrailConfig("MAP");
+                                                if (getTracerId() == null) {
+                                                    setTracing(true);
                                                     menuTrace.setText(
                                                             "Trace Aus ("
-                                                                    + MLogUtil.getTrailConfig()
+                                                                    + getTracerId()
                                                                     + ")");
                                                 } else {
-                                                    setTrailConfig(null);
+                                                    setTracing(false);
                                                     menuTrace.setText("Trace An");
                                                 }
                                             }
@@ -310,17 +315,24 @@ public class SopUi extends UI implements SopUiApi {
         return VaadinSopAccessControl.getUserName(getSession());
     }
 
-    public void requestBegin() {
-        if (trailConfig != null) MLogUtil.setTrailConfig(MLogUtil.TRAIL_SOURCE_UI, trailConfig);
-        else MLogUtil.releaseTrailConfig();
-        
+    public void requestBegin(HttpServletRequest request) {
+    	Scope scope = ITracer.get().start("vaadin", tracerId != null || CFG_TRACE_ACTIVE.value(), 
+    			"id", tracerId, 
+    			"url", request.getRequestURL().toString() 
+    			);
+        getSession().setAttribute("_tracer_scope", scope);
         subjectSet(getSession());
     }
 
     public void requestEnd() {
         
+    	Scope scope = (Scope)getSession().getAttribute("_tracer_scope");
+    	
         subjectRemove(getSession());
-        MLogUtil.releaseTrailConfig();
+        
+    	if (scope != null)
+    		scope.close();
+
     }
     
     protected static void subjectSet(VaadinSession session) {
@@ -340,17 +352,15 @@ public class SopUi extends UI implements SopUiApi {
     }
     
 
-    public String getTrailConfig() {
-        return trailConfig;
+    public String getTracerId() {
+        return tracerId;
     }
 
-    public void setTrailConfig(String trailConfig) {
-        if (trailConfig == null) {
-            this.trailConfig = trailConfig;
-            MLogUtil.releaseTrailConfig();
+    public void setTracing(boolean activate) {
+        if (activate) {
+            this.tracerId = UUID.randomUUID().toString().replaceAll("-", "");
         } else {
-            MLogUtil.setTrailConfig(MLogUtil.TRAIL_SOURCE_UI, trailConfig);
-            this.trailConfig = MLogUtil.getTrailConfig();
+            this.tracerId = null;
         }
     }
 

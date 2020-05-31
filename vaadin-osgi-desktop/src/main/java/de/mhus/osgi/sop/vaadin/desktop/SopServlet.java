@@ -82,7 +82,7 @@ public class SopServlet extends VaadinServlet {
                 VaadinSession vaadinSession = getService().findVaadinSession(vs);
                 request.setAttribute("__vs", vaadinSession);
                 for (UI ui : vaadinSession.getUIs()) {
-                    if (ui instanceof SopUi) ((SopUi) ui).requestBegin();
+                    if (ui instanceof SopUi) ((SopUi) ui).requestBegin(request);
                 }
             } catch (Throwable t) {
 
