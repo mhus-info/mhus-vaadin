@@ -38,6 +38,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import de.mhus.lib.core.MString;
 import de.mhus.lib.core.cfg.CfgBoolean;
+import de.mhus.lib.core.cfg.CfgString;
 import de.mhus.lib.core.logging.ITracer;
 import de.mhus.lib.core.security.AccessControl;
 import de.mhus.lib.core.security.Account;
@@ -55,7 +56,7 @@ import io.opentracing.Scope;
 public class SopUi extends UI implements SopUiApi {
 
     private static CfgBoolean CFG_GEEK_MODE = new CfgBoolean(SopUiApi.class, "geek", false);
-    private static CfgBoolean CFG_TRACE_ACTIVE = new CfgBoolean(SopUi.class, "traceActive", false);
+    private static CfgString CFG_TRACE_ACTIVE = new CfgString(SopUi.class, "traceActivation", "");
 
     // https://ccsearch.creativecommons.org/image/detail/pugDQPO07WYrRd52PHD68Q==
     // "cross process=loves" by Vivianna_love is licensed under CC BY 2.0
@@ -316,7 +317,7 @@ public class SopUi extends UI implements SopUiApi {
     }
 
     public void requestBegin(HttpServletRequest request) {
-    	Scope scope = ITracer.get().start("vaadin", tracerId != null || CFG_TRACE_ACTIVE.value(), 
+    	Scope scope = ITracer.get().start("vaadin", tracerId != null ? tracerId : CFG_TRACE_ACTIVE.value(), 
     			"id", tracerId, 
     			"url", request.getRequestURL().toString() 
     			);
