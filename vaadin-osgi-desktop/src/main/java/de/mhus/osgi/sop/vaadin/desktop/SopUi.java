@@ -319,7 +319,7 @@ public class SopUi extends UI implements SopUiApi {
     public void requestBegin(HttpServletRequest request) {
     	Scope scope = ITracer.get().start("vaadin", tracerId != null ? tracerId : CFG_TRACE_ACTIVE.value(), 
     			"id", tracerId, 
-    			"url", request.getRequestURL().toString() 
+    			"url", request.getRequestURL()
     			);
         getSession().setAttribute("_tracer_scope", scope);
         subjectSet(getSession());
