@@ -38,6 +38,19 @@
     		<groupId>com.vaadin</groupId>
     		<artifactId>vaadin-compatibility-shared</artifactId>
     	</dependency>
+
+<!-- 
+        <dependency>
+           <groupId>de.mhus.ports</groupId>
+           <artifactId>vaadin-refresher</artifactId>
+           <version>${mhus-ports-vaadin.version}</version>
+       </dependency>
+        <dependency>
+           <groupId>de.mhus.ports</groupId>
+           <artifactId>vaadin-timerextension</artifactId>
+           <version>${mhus-ports-vaadin.version}</version>
+       </dependency>
+ -->
     	        
     </dependencies>
 
