@@ -44,7 +44,7 @@ public class LinkedListEditor<E> extends AbstractBeanListEditor<E> {
         for (PojoAttribute<Object> attr : beanModel) {
             try {
                 Object value = attr.get(original);
-                attr.set(clone, value);
+                attr.set(clone, value, false);
             } catch (Throwable t) {
             }
         }
@@ -98,7 +98,7 @@ public class LinkedListEditor<E> extends AbstractBeanListEditor<E> {
         for (PojoAttribute<Object> attr : beanModel) {
             try {
                 Object value = attr.get(entry);
-                attr.set(original, value);
+                attr.set(original, value, false);
             } catch (Throwable t) {
             }
         }
@@ -143,7 +143,7 @@ public class LinkedListEditor<E> extends AbstractBeanListEditor<E> {
             if (entry instanceof ManagedListEntity)
                 done = ((ManagedListEntity) entry).doPreNew(this, id);
 
-            if (!done) idAttribute.set(entry, id);
+            if (!done) idAttribute.set(entry, id, false);
 
             list.add(entry);
             created.add(entry);

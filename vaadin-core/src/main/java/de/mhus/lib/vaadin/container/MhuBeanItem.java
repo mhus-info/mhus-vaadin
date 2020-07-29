@@ -216,7 +216,7 @@ public class MhuBeanItem<BT> extends PropertysetItem {
         @Override
         public void setValue(T newValue) throws com.vaadin.v7.data.Property.ReadOnlyException {
             try {
-                attr.set(bean, newValue);
+                attr.set(bean, newValue, false);
             } catch (IOException e) {
                 throw new com.vaadin.v7.data.Property.ReadOnlyException(
                         "Can't write " + attr.getName() + ": " + e);
