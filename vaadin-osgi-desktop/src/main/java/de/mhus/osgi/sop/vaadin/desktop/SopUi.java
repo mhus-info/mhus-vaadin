@@ -45,7 +45,7 @@ import de.mhus.lib.core.security.Account;
 import de.mhus.lib.core.shiro.AccessUtil;
 import de.mhus.lib.core.shiro.SubjectEnvironment;
 import de.mhus.lib.vaadin.desktop.Desktop;
-import de.mhus.lib.vaadin.desktop.GuiSpace;
+import de.mhus.lib.vaadin.desktop.SimpleGuiSpace;
 import de.mhus.lib.vaadin.desktop.GuiSpaceService;
 import de.mhus.lib.vaadin.login.LoginScreen;
 import io.opentracing.Scope;
@@ -278,7 +278,7 @@ public class SopUi extends UI implements SopUiApi {
 
     @Override
     public void rememberNavigation(
-            GuiSpace space, String subSpace, String search, boolean navLink) {
+            SimpleGuiSpace space, String subSpace, String search, boolean navLink) {
         desktop.rememberNavigation(
                 GuiUtil.getHistoryCaption(space.getDisplayName(Locale.GERMAN), subSpace, search),
                 space.getName(),
@@ -297,14 +297,14 @@ public class SopUi extends UI implements SopUiApi {
     public boolean hasAccess(String role) {
         if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return false;
 
-        return AccessUtil.isPermitted(GuiSpace.class.getCanonicalName(), "access", role.trim().toLowerCase());
+        return AccessUtil.isPermitted(SimpleGuiSpace.class.getCanonicalName(), "access", role.trim().toLowerCase());
     }
 
     @Override
     public boolean hasWriteAccess(String role) {
         if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return false;
 
-        return AccessUtil.isPermitted(GuiSpace.class.getCanonicalName(), "write", role.toLowerCase());
+        return AccessUtil.isPermitted(SimpleGuiSpace.class.getCanonicalName(), "write", role.toLowerCase());
     }
 
     public Account getCurrentUser() {
