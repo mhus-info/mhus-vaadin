@@ -17,7 +17,7 @@ import de.mhus.lib.core.security.AccessControl;
 
 public interface GuiApi {
 
-    boolean hasAccess(String role);
+    // boolean hasAccess(String role);
 
     String getCurrentUserName();
 

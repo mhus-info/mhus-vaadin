@@ -293,12 +293,12 @@ public class SopUi extends UI implements SopUiApi {
         desktop.rememberNavigation(caption, space, subSpace, search, navLink);
     }
 
-    @Override
-    public boolean hasAccess(String role) {
-        if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return false;
-
-        return AccessUtil.isPermitted(SimpleGuiSpace.class.getCanonicalName(), "access", role.trim().toLowerCase());
-    }
+//    @Override
+//    public boolean hasAccess(String role) {
+//        if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return false;
+//
+//        return AccessUtil.isPermitted(SimpleGuiSpace.class.getCanonicalName(), "access", role.trim().toLowerCase());
+//    }
 
     @Override
     public boolean hasWriteAccess(String role) {

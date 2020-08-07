@@ -37,7 +37,7 @@ public abstract class AbstractGuiSpace extends MLog implements GuiSpaceService {
         if (def != null) {
             try {
                 Class<? extends AbstractComponent> clazz = def.spaceClass();
-                AbstractComponent impl = (AbstractComponent) clazz.getEnclosingConstructor().newInstance();
+                AbstractComponent impl = (AbstractComponent) clazz.getConstructor().newInstance();
                 return impl;
             } catch (Exception e) {
                 throw new MRuntimeException(e);
