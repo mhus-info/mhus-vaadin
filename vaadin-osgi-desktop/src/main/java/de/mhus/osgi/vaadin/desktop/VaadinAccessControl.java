@@ -11,7 +11,7 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mhus.osgi.sop.vaadin.desktop;
+package de.mhus.osgi.vaadin.desktop;
 
 import org.apache.shiro.subject.Subject;
 
@@ -26,14 +26,14 @@ import de.mhus.lib.core.shiro.ShiroAccount;
 import de.mhus.lib.core.shiro.AccessApi;
 import de.mhus.lib.core.shiro.AccessUtil;
 
-public class VaadinSopAccessControl extends MLog implements AccessControl {
+public class VaadinAccessControl extends MLog implements AccessControl {
 
     public static final String ATTR_SUBJECT = "_access_subject";
     public static final String ATTR_NAME = "_access_name";
     public static final String ATTR_CONTEXT = "_access_context";
     private VaadinSession session;
 
-    public VaadinSopAccessControl() {
+    public VaadinAccessControl() {
         session = UI.getCurrent().getSession();
     }
 
@@ -62,7 +62,7 @@ public class VaadinSopAccessControl extends MLog implements AccessControl {
             session.setAttribute(ATTR_NAME, username);
             
             // need to set subject session NOW
-            SopUi.subjectSet(session);
+            DesktopUi.subjectSet(session);
 
             return true;
         } catch (Throwable t) {
@@ -87,7 +87,7 @@ public class VaadinSopAccessControl extends MLog implements AccessControl {
             } catch (Throwable t) {}
         }
         // remove subject session
-        SopUi.subjectRemove(session);
+        DesktopUi.subjectRemove(session);
     }
 
     @Override

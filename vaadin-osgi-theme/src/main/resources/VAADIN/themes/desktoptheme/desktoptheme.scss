@@ -65,13 +65,13 @@ $desktop-background-image: "img/3466156670_c43832505e_o.jpg" !default;
 @import "../valo/valo.scss";
 
 @-moz-document url-prefix() {
-	.soptheme .desktop-screen .menubar .v-menubar-menuitem-right {
+	.desktoptheme .desktop-screen .menubar .v-menubar-menuitem-right {
 		float: right;
 		margin-top: -31px;
 	}
 }
 
-@mixin soptheme {
+@mixin desktoptheme {
   @include valo;
 
   .flatbutton {
@@ -140,7 +140,7 @@ $desktop-background-image: "img/3466156670_c43832505e_o.jpg" !default;
     
     .content {
     top: 0;
-    left 0;
+    left: 0;
     width: 100%;
     height: 100%;
     padding-bottom: $menubar-height;

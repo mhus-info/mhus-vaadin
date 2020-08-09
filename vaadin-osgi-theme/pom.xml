@@ -26,7 +26,7 @@
   <artifactId>vaadin-osgi-theme</artifactId>
     <packaging>bundle</packaging>
 
-    <description>Sop Desktop GUI Theme</description>
+    <description>Desktop GUI Theme</description>
 
     <dependencies>
 
@@ -64,7 +64,7 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Version>${project.version}</Bundle-Version>
-                        <Export-Package>de.mhus.osgi.sop.vaadin.theme.*;version=${project.version}</Export-Package>
+                        <Export-Package>de.mhus.osgi.vaadin.theme.*;version=${project.version}</Export-Package>
                         <Import-Package>*</Import-Package>
                         <Include-Resource>
                         	VAADIN=${basedir}/target/classes/VAADIN

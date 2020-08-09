@@ -11,7 +11,7 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mhus.osgi.sop.vaadin.desktop;
+package de.mhus.osgi.vaadin.desktop;
 
 import java.util.Date;
 import java.util.Locale;
@@ -50,13 +50,13 @@ import de.mhus.lib.vaadin.desktop.GuiSpaceService;
 import de.mhus.lib.vaadin.login.LoginScreen;
 import io.opentracing.Scope;
 
-@Theme("soptheme")
-// @Widgetset("de.mhus.osgi.sop.vaadin.theme.SopWidgetset")
+@Theme("desktoptheme")
+// @Widgetset("de.mhus.osgi.vaadin.theme.SopWidgetset")
 @Widgetset(value = "com.vaadin.v7.Vaadin7WidgetSet")
-public class SopUi extends UI implements SopUiApi {
+public class DesktopUi extends UI implements DesktopApi {
 
-    private static CfgBoolean CFG_GEEK_MODE = new CfgBoolean(SopUiApi.class, "geek", false);
-    private static CfgString CFG_TRACE_ACTIVE = new CfgString(SopUi.class, "traceActivation", "");
+    private static CfgBoolean CFG_GEEK_MODE = new CfgBoolean(DesktopApi.class, "geek", false);
+    private static CfgString CFG_TRACE_ACTIVE = new CfgString(DesktopUi.class, "traceActivation", "");
 
     // https://ccsearch.creativecommons.org/image/detail/pugDQPO07WYrRd52PHD68Q==
     // "cross process=loves" by Vivianna_love is licensed under CC BY 2.0
@@ -165,7 +165,7 @@ public class SopUi extends UI implements SopUiApi {
         host = request.getHeader("Host");
 
         //        accessControl = new VaadinAccessControl(CFG_REALM.value());
-        accessControl = new VaadinSopAccessControl();
+        accessControl = new VaadinAccessControl();
 
         if (!accessControl.isUserSignedIn()) {
             setContent(
@@ -308,12 +308,12 @@ public class SopUi extends UI implements SopUiApi {
     }
 
     public Account getCurrentUser() {
-        return VaadinSopAccessControl.getUserAccount(getSession());
+        return VaadinAccessControl.getUserAccount(getSession());
     }
 
     @Override
     public String getCurrentUserName() {
-        return VaadinSopAccessControl.getUserName(getSession());
+        return VaadinAccessControl.getUserName(getSession());
     }
 
     public void requestBegin(HttpServletRequest request) {
@@ -337,17 +337,17 @@ public class SopUi extends UI implements SopUiApi {
     }
     
     protected static void subjectSet(VaadinSession session) {
-        Subject subject = (Subject)session.getAttribute(VaadinSopAccessControl.ATTR_SUBJECT);
+        Subject subject = (Subject)session.getAttribute(VaadinAccessControl.ATTR_SUBJECT);
         if (subject != null) {
             SubjectEnvironment env = AccessUtil.useSubject(subject);
-            session.setAttribute(VaadinSopAccessControl.ATTR_CONTEXT, env);
+            session.setAttribute(VaadinAccessControl.ATTR_CONTEXT, env);
         }
     }
     
     protected static void subjectRemove(VaadinSession session) {
-        SubjectEnvironment env = (SubjectEnvironment) session.getAttribute(VaadinSopAccessControl.ATTR_CONTEXT);
+        SubjectEnvironment env = (SubjectEnvironment) session.getAttribute(VaadinAccessControl.ATTR_CONTEXT);
         if (env != null) {
-            session.setAttribute(VaadinSopAccessControl.ATTR_CONTEXT, null);
+            session.setAttribute(VaadinAccessControl.ATTR_CONTEXT, null);
             env.close();
         }
     }

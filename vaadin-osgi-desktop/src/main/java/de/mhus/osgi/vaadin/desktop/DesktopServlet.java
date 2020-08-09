@@ -11,7 +11,7 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mhus.osgi.sop.vaadin.desktop;
+package de.mhus.osgi.vaadin.desktop;
 
 import java.io.IOException;
 
@@ -34,10 +34,10 @@ import com.vaadin.ui.UI;
 @Component(
         service = Servlet.class,
         property = "alias=/ui",
-        name = "SopDesktop",
+        name = "UiDesktop",
         servicefactory = true)
-@VaadinServletConfiguration(ui = SopUi.class, productionMode = true)
-public class SopServlet extends VaadinServlet {
+@VaadinServletConfiguration(ui = DesktopUi.class, productionMode = true)
+public class DesktopServlet extends VaadinServlet {
 
     private static final long serialVersionUID = 1L;
     private BundleContext context;
@@ -62,7 +62,7 @@ public class SopServlet extends VaadinServlet {
                 VaadinSession vaadinSession = (VaadinSession) request.getAttribute("__vs");
                 if (vaadinSession != null) {
                     for (UI ui : vaadinSession.getUIs()) {
-                        if (ui instanceof SopUi) ((SopUi) ui).requestEnd();
+                        if (ui instanceof DesktopUi) ((DesktopUi) ui).requestEnd();
                     }
                 }
             } catch (Throwable t) {
@@ -82,7 +82,7 @@ public class SopServlet extends VaadinServlet {
                 VaadinSession vaadinSession = getService().findVaadinSession(vs);
                 request.setAttribute("__vs", vaadinSession);
                 for (UI ui : vaadinSession.getUIs()) {
-                    if (ui instanceof SopUi) ((SopUi) ui).requestBegin(request);
+                    if (ui instanceof DesktopUi) ((DesktopUi) ui).requestBegin(request);
                 }
             } catch (Throwable t) {
 
