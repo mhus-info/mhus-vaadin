@@ -13,9 +13,9 @@
  */
 package de.mhus.lib.vaadin;
 
-import com.vaadin.ui.UI;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 public class ConfirmDialog extends ModalDialog {
