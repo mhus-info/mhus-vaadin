@@ -60,7 +60,7 @@ public class VaadinAccessControl extends MLog implements AccessControl {
                 return false;
             session.setAttribute(ATTR_SUBJECT, subject);
             session.setAttribute(ATTR_NAME, username);
-            
+
             // need to set subject session NOW
             DesktopUi.subjectSet(session);
 
@@ -79,12 +79,13 @@ public class VaadinAccessControl extends MLog implements AccessControl {
     @Override
     public void signOut() {
         session.setAttribute(ATTR_NAME, null);
-        Subject subject = (Subject)session.getAttribute(ATTR_SUBJECT);
+        Subject subject = (Subject) session.getAttribute(ATTR_SUBJECT);
         session.setAttribute(ATTR_SUBJECT, null);
         if (subject != null) {
             try {
                 subject.logout();
-            } catch (Throwable t) {}
+            } catch (Throwable t) {
+            }
         }
         // remove subject session
         DesktopUi.subjectRemove(session);
@@ -93,7 +94,7 @@ public class VaadinAccessControl extends MLog implements AccessControl {
     @Override
     public Account getAccount() {
         // String account = (String) session.getAttribute(ATTR_NAME);
-        Subject subject = (Subject)session.getAttribute(ATTR_SUBJECT);
+        Subject subject = (Subject) session.getAttribute(ATTR_SUBJECT);
         if (subject == null) return null;
         return new ShiroAccount(subject);
     }
@@ -105,7 +106,7 @@ public class VaadinAccessControl extends MLog implements AccessControl {
     }
 
     public static Account getUserAccount(VaadinSession session) {
-        Subject subject = (Subject)session.getAttribute(ATTR_SUBJECT);
+        Subject subject = (Subject) session.getAttribute(ATTR_SUBJECT);
         if (subject == null) return null;
         return new ShiroAccount(subject);
     }

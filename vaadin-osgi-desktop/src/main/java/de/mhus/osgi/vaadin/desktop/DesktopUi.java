@@ -56,7 +56,8 @@ import io.opentracing.Scope;
 public class DesktopUi extends UI implements DesktopApi {
 
     private static CfgBoolean CFG_GEEK_MODE = new CfgBoolean(DesktopApi.class, "geek", false);
-    private static CfgString CFG_TRACE_ACTIVE = new CfgString(DesktopUi.class, "traceActivation", "");
+    private static CfgString CFG_TRACE_ACTIVE =
+            new CfgString(DesktopUi.class, "traceActivation", "");
 
     // https://ccsearch.creativecommons.org/image/detail/pugDQPO07WYrRd52PHD68Q==
     // "cross process=loves" by Vivianna_love is licensed under CC BY 2.0
@@ -64,7 +65,7 @@ public class DesktopUi extends UI implements DesktopApi {
     private static final long serialVersionUID = 1L;
 
     //	private static CfgString CFG_REALM = new CfgString(SopUi.class, "realm", "karaf");
-//    private static Log log = Log.getLog(SopUi.class);
+    //    private static Log log = Log.getLog(SopUi.class);
     private Desktop desktop;
     private AccessControl accessControl;
     private ServiceTracker<GuiSpaceService, GuiSpaceService> spaceTracker;
@@ -133,9 +134,7 @@ public class DesktopUi extends UI implements DesktopApi {
                                                 if (getTracerId() == null) {
                                                     setTracing(true);
                                                     menuTrace.setText(
-                                                            "Trace Aus ("
-                                                                    + getTracerId()
-                                                                    + ")");
+                                                            "Trace Aus (" + getTracerId() + ")");
                                                 } else {
                                                     setTracing(false);
                                                     menuTrace.setText("Trace An");
@@ -293,18 +292,21 @@ public class DesktopUi extends UI implements DesktopApi {
         desktop.rememberNavigation(caption, space, subSpace, search, navLink);
     }
 
-//    @Override
-//    public boolean hasAccess(String role) {
-//        if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return false;
-//
-//        return AccessUtil.isPermitted(SimpleGuiSpace.class.getCanonicalName(), "access", role.trim().toLowerCase());
-//    }
+    //    @Override
+    //    public boolean hasAccess(String role) {
+    //        if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return
+    // false;
+    //
+    //        return AccessUtil.isPermitted(SimpleGuiSpace.class.getCanonicalName(), "access",
+    // role.trim().toLowerCase());
+    //    }
 
     @Override
     public boolean hasWriteAccess(String role) {
         if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return false;
 
-        return AccessUtil.isPermitted(SimpleGuiSpace.class.getCanonicalName(), "write", role.toLowerCase());
+        return AccessUtil.isPermitted(
+                SimpleGuiSpace.class.getCanonicalName(), "write", role.toLowerCase());
     }
 
     public Account getCurrentUser() {
@@ -317,41 +319,44 @@ public class DesktopUi extends UI implements DesktopApi {
     }
 
     public void requestBegin(HttpServletRequest request) {
-    	Scope scope = ITracer.get().start("vaadin", tracerId != null ? tracerId : CFG_TRACE_ACTIVE.value(), 
-    			"id", tracerId, 
-    			"url", request.getRequestURL()
-    			);
+        Scope scope =
+                ITracer.get()
+                        .start(
+                                "vaadin",
+                                tracerId != null ? tracerId : CFG_TRACE_ACTIVE.value(),
+                                "id",
+                                tracerId,
+                                "url",
+                                request.getRequestURL());
         getSession().setAttribute("_tracer_scope", scope);
         subjectSet(getSession());
     }
 
     public void requestEnd() {
-        
-    	Scope scope = (Scope)getSession().getAttribute("_tracer_scope");
-    	
-        subjectRemove(getSession());
-        
-    	if (scope != null)
-    		scope.close();
 
+        Scope scope = (Scope) getSession().getAttribute("_tracer_scope");
+
+        subjectRemove(getSession());
+
+        if (scope != null) scope.close();
     }
-    
+
     protected static void subjectSet(VaadinSession session) {
-        Subject subject = (Subject)session.getAttribute(VaadinAccessControl.ATTR_SUBJECT);
+        Subject subject = (Subject) session.getAttribute(VaadinAccessControl.ATTR_SUBJECT);
         if (subject != null) {
             SubjectEnvironment env = AccessUtil.useSubject(subject);
             session.setAttribute(VaadinAccessControl.ATTR_CONTEXT, env);
         }
     }
-    
+
     protected static void subjectRemove(VaadinSession session) {
-        SubjectEnvironment env = (SubjectEnvironment) session.getAttribute(VaadinAccessControl.ATTR_CONTEXT);
+        SubjectEnvironment env =
+                (SubjectEnvironment) session.getAttribute(VaadinAccessControl.ATTR_CONTEXT);
         if (env != null) {
             session.setAttribute(VaadinAccessControl.ATTR_CONTEXT, null);
             env.close();
         }
     }
-    
 
     public String getTracerId() {
         return tracerId;

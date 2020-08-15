@@ -353,7 +353,7 @@ public class Desktop extends CssLayout implements MNlsProvider {
 
     protected boolean hasAccess(GuiSpaceService space) {
         return space.hasAccess(getApi().getAccessControl());
-//        return getApi().hasAccess(space.getName());
+        //        return getApi().hasAccess(space.getName());
     }
 
     protected String showSpace(GuiSpaceService space, String subSpace, String search) {
@@ -465,7 +465,8 @@ public class Desktop extends CssLayout implements MNlsProvider {
         GuiSpaceService space = getSpace(spaceId);
         if (space == null) return false;
         if (!space.hasAccess(getApi().getAccessControl()))
-//        if (!getApi().hasAccess(space.getName()) || !space.hasAccess(getApi().getAccessControl()))
+            //        if (!getApi().hasAccess(space.getName()) ||
+            // !space.hasAccess(getApi().getAccessControl()))
             return false;
 
         String ret = showSpace(space, subSpace, search);

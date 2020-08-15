@@ -18,16 +18,14 @@ public abstract class AbstractGuiSpace extends MLog implements GuiSpaceService {
     @Override
     public String getName() {
         GuiSpaceDefinition def = getClass().getAnnotation(GuiSpaceDefinition.class);
-        if (def != null)
-            return def.name();
+        if (def != null) return def.name();
         return getClass().getSimpleName();
     }
 
     @Override
     public String getDisplayName(Locale locale) {
         GuiSpaceDefinition def = getClass().getAnnotation(GuiSpaceDefinition.class);
-        if (def != null)
-            return def.description();
+        if (def != null) return def.description();
         return getClass().getSimpleName();
     }
 
@@ -98,5 +96,4 @@ public abstract class AbstractGuiSpace extends MLog implements GuiSpaceService {
         }
         return null;
     }
-
 }
