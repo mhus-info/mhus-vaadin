@@ -48,8 +48,7 @@ public abstract class AbstractVaadinOperation extends AbstractOperation implemen
     protected abstract OperationResult doExecute2(TaskContext context) throws Exception;
 
     @Override
-    public OperationResult doExecute(IConfig editorProperties, Component editor)
-            throws Exception {
+    public OperationResult doExecute(IConfig editorProperties, Component editor) throws Exception {
         if (editor != null && (editor instanceof AbstractVaadinOperationEditor))
             ((AbstractVaadinOperationEditor) editor).fillOperationParameters(editorProperties);
 
