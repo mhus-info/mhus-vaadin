@@ -346,7 +346,7 @@ public class DesktopUi extends UI implements DesktopApi {
     protected static void subjectSet(VaadinSession session) {
         Subject subject = (Subject) session.getAttribute(VaadinAccessControl.ATTR_SUBJECT);
         if (subject != null) {
-            SubjectEnvironment env = AccessUtil.useSubject(subject);
+            SubjectEnvironment env = AccessUtil.asSubject(subject);
             session.setAttribute(VaadinAccessControl.ATTR_CONTEXT, env);
         }
     }
