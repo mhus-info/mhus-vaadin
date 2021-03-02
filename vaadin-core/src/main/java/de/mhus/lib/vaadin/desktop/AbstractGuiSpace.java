@@ -23,8 +23,8 @@ import com.vaadin.ui.AbstractComponent;
 
 import de.mhus.lib.core.MLog;
 import de.mhus.lib.core.MString;
+import de.mhus.lib.core.aaa.Aaa;
 import de.mhus.lib.core.security.AccessControl;
-import de.mhus.lib.core.shiro.AccessUtil;
 import de.mhus.lib.errors.MRuntimeException;
 import de.mhus.lib.vaadin.annotations.GuiSpaceDefinition;
 
@@ -64,9 +64,9 @@ public abstract class AbstractGuiSpace extends MLog implements GuiSpaceService {
         GuiSpaceDefinition def = getClass().getAnnotation(GuiSpaceDefinition.class);
         if (def != null) {
             Class<? extends AbstractComponent> clazz = def.spaceClass();
-            if (AccessUtil.isAnnotated(clazz)) {
+            if (Aaa.isAnnotated(clazz)) {
                 try {
-                    AccessUtil.checkPermission(clazz);
+                    Aaa.checkPermission(clazz);
                 } catch (AuthorizationException e) {
                     return false;
                 }

@@ -39,13 +39,13 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import de.mhus.lib.core.MString;
+import de.mhus.lib.core.aaa.Aaa;
+import de.mhus.lib.core.aaa.SubjectEnvironment;
 import de.mhus.lib.core.cfg.CfgBoolean;
 import de.mhus.lib.core.cfg.CfgString;
 import de.mhus.lib.core.logging.ITracer;
 import de.mhus.lib.core.security.AccessControl;
 import de.mhus.lib.core.security.Account;
-import de.mhus.lib.core.shiro.AccessUtil;
-import de.mhus.lib.core.shiro.SubjectEnvironment;
 import de.mhus.lib.vaadin.desktop.Desktop;
 import de.mhus.lib.vaadin.desktop.SimpleGuiSpace;
 import de.mhus.lib.vaadin.desktop.GuiSpaceService;
@@ -307,7 +307,7 @@ public class DesktopUi extends UI implements DesktopApi {
     public boolean hasWriteAccess(String role) {
         if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return false;
 
-        return AccessUtil.isPermitted(
+        return Aaa.isPermitted(
                 SimpleGuiSpace.class.getCanonicalName(), "write", role.toLowerCase());
     }
 
@@ -346,7 +346,7 @@ public class DesktopUi extends UI implements DesktopApi {
     protected static void subjectSet(VaadinSession session) {
         Subject subject = (Subject) session.getAttribute(VaadinAccessControl.ATTR_SUBJECT);
         if (subject != null) {
-            SubjectEnvironment env = AccessUtil.asSubject(subject);
+            SubjectEnvironment env = Aaa.asSubject(subject);
             session.setAttribute(VaadinAccessControl.ATTR_CONTEXT, env);
         }
     }

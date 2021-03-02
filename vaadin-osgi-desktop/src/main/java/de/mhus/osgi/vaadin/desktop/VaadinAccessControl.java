@@ -22,11 +22,11 @@ import com.vaadin.ui.UI;
 
 import de.mhus.lib.core.M;
 import de.mhus.lib.core.MLog;
+import de.mhus.lib.core.aaa.Aaa;
+import de.mhus.lib.core.aaa.AccessApi;
+import de.mhus.lib.core.aaa.ShiroAccount;
 import de.mhus.lib.core.security.AccessControl;
 import de.mhus.lib.core.security.Account;
-import de.mhus.lib.core.shiro.ShiroAccount;
-import de.mhus.lib.core.shiro.AccessApi;
-import de.mhus.lib.core.shiro.AccessUtil;
 
 public class VaadinAccessControl extends MLog implements AccessControl {
 
@@ -58,7 +58,7 @@ public class VaadinAccessControl extends MLog implements AccessControl {
 
         try {
             Subject subject = M.l(AccessApi.class).createSubject();
-            if (!AccessUtil.login(subject, username, password, true, session.getLocale()))
+            if (!Aaa.login(subject, username, password, true, session.getLocale()))
                 return false;
             session.setAttribute(ATTR_SUBJECT, subject);
             session.setAttribute(ATTR_NAME, username);
