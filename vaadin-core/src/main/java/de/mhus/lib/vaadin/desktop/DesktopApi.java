@@ -27,6 +27,8 @@ public interface DesktopApi extends GuiApi {
     void rememberNavigation(
             String caption, String space, String subSpace, String search, boolean navLink);
 
-    boolean hasWriteAccess(String role);
+    boolean hasAccess(Class<? extends SimpleGuiSpace> space, String role);
+
+    boolean hasAccess(SimpleGuiSpace space, String role);
 
 }

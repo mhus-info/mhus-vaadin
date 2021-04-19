@@ -48,8 +48,8 @@ import de.mhus.lib.core.security.AccessControl;
 import de.mhus.lib.core.security.Account;
 import de.mhus.lib.vaadin.desktop.Desktop;
 import de.mhus.lib.vaadin.desktop.DesktopApi;
-import de.mhus.lib.vaadin.desktop.SimpleGuiSpace;
 import de.mhus.lib.vaadin.desktop.GuiSpaceService;
+import de.mhus.lib.vaadin.desktop.SimpleGuiSpace;
 import de.mhus.lib.vaadin.login.LoginScreen;
 import io.opentracing.Scope;
 
@@ -304,13 +304,13 @@ public class DesktopUi extends UI implements InternalDesktopApi {
     // role.trim().toLowerCase());
     //    }
 
-    @Override
-    public boolean hasWriteAccess(String role) {
-        if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return false;
-
-        return Aaa.isPermitted(
-                SimpleGuiSpace.class.getCanonicalName(), "write", role.toLowerCase());
-    }
+//    @Override
+//    public boolean hasWriteAccess(String role) {
+//        if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return false;
+//
+//        return Aaa.isPermitted(
+//                SimpleGuiSpace.class.getCanonicalName(), "write", role.toLowerCase());
+//    }
 
     public Account getCurrentUser() {
         return VaadinAccessControl.getUserAccount(getSession());
@@ -376,5 +376,15 @@ public class DesktopUi extends UI implements InternalDesktopApi {
     @Override
     public String getHost() {
         return host;
+    }
+
+    @Override
+    public boolean hasAccess(Class<? extends SimpleGuiSpace> space, String role) {
+        return Aaa.hasAccess(GuiSpaceService.class.getCanonicalName() + ":" + Aaa.normalize(role) + ":" + space.getCanonicalName() );
+    }
+
+    @Override
+    public boolean hasAccess(SimpleGuiSpace space, String role) {
+        return Aaa.hasAccess(GuiSpaceService.class.getCanonicalName() + ":" + Aaa.normalize(role) + ":" + space.getName() );
     }
 }
