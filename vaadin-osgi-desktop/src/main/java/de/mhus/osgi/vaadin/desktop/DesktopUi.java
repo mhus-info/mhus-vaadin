@@ -47,6 +47,7 @@ import de.mhus.lib.core.logging.ITracer;
 import de.mhus.lib.core.security.AccessControl;
 import de.mhus.lib.core.security.Account;
 import de.mhus.lib.vaadin.desktop.Desktop;
+import de.mhus.lib.vaadin.desktop.DesktopApi;
 import de.mhus.lib.vaadin.desktop.SimpleGuiSpace;
 import de.mhus.lib.vaadin.desktop.GuiSpaceService;
 import de.mhus.lib.vaadin.login.LoginScreen;
@@ -55,7 +56,7 @@ import io.opentracing.Scope;
 @Theme("desktoptheme")
 // @Widgetset("de.mhus.osgi.vaadin.theme.SopWidgetset")
 @Widgetset(value = "com.vaadin.v7.Vaadin7WidgetSet")
-public class DesktopUi extends UI implements DesktopApi {
+public class DesktopUi extends UI implements InternalDesktopApi {
 
     private static CfgBoolean CFG_GEEK_MODE = new CfgBoolean(DesktopApi.class, "geek", false);
     private static CfgString CFG_TRACE_ACTIVE =

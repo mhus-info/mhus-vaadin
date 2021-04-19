@@ -15,6 +15,8 @@
  */
 package de.mhus.lib.vaadin.desktop;
 
+import java.util.Locale;
+
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.MenuBar.MenuItem;
 
@@ -50,4 +52,15 @@ public abstract class SimpleGuiSpace extends MLog implements GuiSpaceService {
     public boolean isHiddenInMenu() {
         return false;
     }
+
+    @Override
+    public String getName() {
+        return getClass().getCanonicalName();
+    }
+
+    @Override
+    public HelpContext createHelpContext(Locale locale) {
+        return null;
+    }
+
 }

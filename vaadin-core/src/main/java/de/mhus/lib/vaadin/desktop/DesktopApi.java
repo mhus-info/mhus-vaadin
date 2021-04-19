@@ -13,12 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mhus.osgi.vaadin.desktop;
-
-import org.osgi.framework.BundleContext;
-
-import de.mhus.lib.vaadin.desktop.GuiApi;
-import de.mhus.lib.vaadin.desktop.SimpleGuiSpace;
+package de.mhus.lib.vaadin.desktop;
 
 public interface DesktopApi extends GuiApi {
 
@@ -34,5 +29,4 @@ public interface DesktopApi extends GuiApi {
 
     boolean hasWriteAccess(String role);
 
-    BundleContext getContext();
 }

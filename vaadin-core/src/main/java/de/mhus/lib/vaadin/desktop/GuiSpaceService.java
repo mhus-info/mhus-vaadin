@@ -69,7 +69,7 @@ public interface GuiSpaceService {
      * If the service needs to create a custom tile preview return a preview component. If not
      * return null.
      *
-     * @return the title
+     * @return the tile for the desctop overview
      */
     AbstractComponent createTile();
     /**
