@@ -19,7 +19,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.TextArea;
 
 import de.mhus.lib.core.MCast;
-import de.mhus.lib.core.config.IConfig;
+import de.mhus.lib.core.node.INode;
 import de.mhus.lib.errors.MException;
 import de.mhus.lib.form.ComponentAdapter;
 import de.mhus.lib.form.ComponentDefinition;
@@ -47,7 +47,7 @@ public class UiTextArea extends UiVaadin {
     public static class Adapter implements ComponentAdapter {
 
         @Override
-        public UiComponent createAdapter(IConfig config) {
+        public UiComponent createAdapter(INode config) {
             return new UiTextArea();
         }
 

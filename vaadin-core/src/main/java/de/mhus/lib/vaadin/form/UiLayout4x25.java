@@ -15,7 +15,7 @@
  */
 package de.mhus.lib.vaadin.form;
 
-import de.mhus.lib.core.config.IConfig;
+import de.mhus.lib.core.node.INode;
 import de.mhus.lib.form.ComponentAdapter;
 import de.mhus.lib.form.ComponentDefinition;
 import de.mhus.lib.form.UiComponent;
@@ -31,7 +31,7 @@ public class UiLayout4x25 extends AbstractColLayout {
     public static class Adapter implements ComponentAdapter {
 
         @Override
-        public UiComponent createAdapter(IConfig config) {
+        public UiComponent createAdapter(INode config) {
             return new UiLayout4x25();
         }
 

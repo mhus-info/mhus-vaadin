@@ -17,12 +17,12 @@ package de.mhus.lib.vaadin.layouter;
 
 import com.vaadin.ui.Component;
 
-import de.mhus.lib.core.config.IConfig;
+import de.mhus.lib.core.node.INode;
 import de.mhus.lib.errors.MException;
 
 public interface XLayElement extends Component {
 
-    void setConfig(IConfig config) throws MException;
+    void setConfig(INode config) throws MException;
 
-    void doAppendChild(XLayElement child, IConfig cChild) throws MException;
+    void doAppendChild(XLayElement child, INode cChild) throws MException;
 }

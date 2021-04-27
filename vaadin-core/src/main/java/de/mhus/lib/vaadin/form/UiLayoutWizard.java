@@ -25,7 +25,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 
-import de.mhus.lib.core.config.IConfig;
+import de.mhus.lib.core.node.INode;
 import de.mhus.lib.errors.MException;
 import de.mhus.lib.form.ComponentAdapter;
 import de.mhus.lib.form.ComponentDefinition;
@@ -113,7 +113,7 @@ public class UiLayoutWizard extends UiLayout {
     public static class Adapter implements ComponentAdapter {
 
         @Override
-        public UiComponent createAdapter(IConfig config) {
+        public UiComponent createAdapter(INode config) {
             return new UiLayoutWizard();
         }
 

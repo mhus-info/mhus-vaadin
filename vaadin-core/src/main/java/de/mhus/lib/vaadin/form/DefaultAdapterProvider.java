@@ -18,8 +18,8 @@ package de.mhus.lib.vaadin.form;
 import de.mhus.lib.core.MActivator;
 import de.mhus.lib.core.MApi;
 import de.mhus.lib.core.activator.DefaultActivator;
-import de.mhus.lib.core.config.IConfig;
 import de.mhus.lib.core.logging.MLogUtil;
+import de.mhus.lib.core.node.INode;
 import de.mhus.lib.form.ActivatorAdapterProvider;
 
 /*
@@ -79,10 +79,10 @@ public class DefaultAdapterProvider extends ActivatorAdapterProvider {
         a.addMap("action", UiAction.Adapter.class);
         a.addMap("void", UiVoid.Adapter.class);
 
-        IConfig cfg = MApi.getCfg(DefaultAdapterProvider.class, null);
+        INode cfg = MApi.getCfg(DefaultAdapterProvider.class, null);
         if (cfg != null) {
             MActivator from = MApi.get().createActivator();
-            for (IConfig mapping : cfg.getObjectList("adapter")) {
+            for (INode mapping : cfg.getObjectList("adapter")) {
                 try {
                     String name = mapping.getString("name");
                     String className = mapping.getString("class");

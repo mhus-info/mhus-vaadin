@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.mhus.lib.core.MLog;
-import de.mhus.lib.core.config.IConfig;
+import de.mhus.lib.core.node.INode;
 import de.mhus.lib.form.IUiBuilder;
 import de.mhus.lib.form.MForm;
 import de.mhus.lib.form.UiComponent;
@@ -37,33 +37,33 @@ public class VaadinFormBuilder extends MLog implements IUiBuilder {
 
         index.clear();
 
-        IConfig model = form.getModel();
+        INode model = form.getModel();
         layout = createLayout(model);
         build(layout, model);
     }
 
-    public UiLayout createLayout(IConfig model) throws Exception {
+    public UiLayout createLayout(INode model) throws Exception {
         String name = "layout" + model.getString("layout", "100");
         UiLayout ret = (UiLayout) form.getAdapterProvider().createComponent(name, model);
         ret.doInit(form, model);
         return ret;
     }
 
-    private void build(UiLayout layout, IConfig model) throws Exception {
+    private void build(UiLayout layout, INode model) throws Exception {
 
-        for (IConfig node : model.getArrayOrCreate(IConfig.NAMELESS_VALUE)) {
+        for (INode node : model.getArrayOrCreate(INode.NAMELESS_VALUE)) {
             String name = node.getName();
             if (name.equals("element")) name = node.getString("type");
 
-            UiComponent comp = form.getAdapterProvider().createComponent(name, (IConfig) node);
-            comp.doInit(form, (IConfig) node);
+            UiComponent comp = form.getAdapterProvider().createComponent(name, (INode) node);
+            comp.doInit(form, (INode) node);
 
             layout.createRow((UiVaadin) comp);
 
             index.put(node.getString("name"), (UiVaadin) comp);
 
             UiLayout nextLayout = ((UiVaadin) comp).getLayout();
-            if (nextLayout != null) build(nextLayout, (IConfig) node);
+            if (nextLayout != null) build(nextLayout, (INode) node);
         }
     }
 

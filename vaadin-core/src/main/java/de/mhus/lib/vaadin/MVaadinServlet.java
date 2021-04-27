@@ -26,10 +26,10 @@ import com.vaadin.server.VaadinServlet;
 
 import de.mhus.lib.core.M;
 import de.mhus.lib.core.MSystem;
-import de.mhus.lib.core.config.IConfig;
-import de.mhus.lib.core.config.IConfigFactory;
-import de.mhus.lib.core.config.MConfig;
 import de.mhus.lib.core.logging.Log;
+import de.mhus.lib.core.node.INode;
+import de.mhus.lib.core.node.INodeFactory;
+import de.mhus.lib.core.node.MNode;
 
 public class MVaadinServlet extends VaadinServlet {
 
@@ -38,7 +38,7 @@ public class MVaadinServlet extends VaadinServlet {
 
     private static Log log = Log.getLog(MVaadinServlet.class);
 
-    private IConfig config;
+    private INode config;
 
     @Override
     public void init() throws ServletException {
@@ -62,11 +62,11 @@ public class MVaadinServlet extends VaadinServlet {
             }
         if (mhusConfigUrl != null)
             try {
-                config = M.l(IConfigFactory.class).read(mhusConfigUrl.toURI().toURL());
+                config = M.l(INodeFactory.class).read(mhusConfigUrl.toURI().toURL());
             } catch (Exception e) {
                 log.i(mhusConfigPath, e);
             }
-        else config = new MConfig();
+        else config = new MNode();
 
         doInit();
     }
@@ -78,7 +78,7 @@ public class MVaadinServlet extends VaadinServlet {
         return "config.xml";
     }
 
-    public IConfig getConfig() {
+    public INode getConfig() {
         return config;
     }
 

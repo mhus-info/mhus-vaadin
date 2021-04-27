@@ -20,8 +20,8 @@ import java.util.HashMap;
 import de.mhus.lib.core.MActivator;
 import de.mhus.lib.core.M;
 import de.mhus.lib.core.activator.MutableActivator;
-import de.mhus.lib.core.config.IConfig;
 import de.mhus.lib.core.definition.DefRoot;
+import de.mhus.lib.core.node.INode;
 import de.mhus.lib.core.util.MObject;
 
 public class LayoutBuilder extends MObject {
@@ -48,7 +48,7 @@ public class LayoutBuilder extends MObject {
 
     public LayoutBuilder() {}
 
-    public LayoutBuilder doBuild(IConfig layout) throws Exception {
+    public LayoutBuilder doBuild(INode layout) throws Exception {
 
         if (layout.getName().equals(DefRoot.ROOT))
             layout = layout.getObjectList("layout").iterator().next();
@@ -66,11 +66,11 @@ public class LayoutBuilder extends MObject {
         return M.l(MActivator.class);
     }
 
-    protected void build(XLayElement parent, IConfig layout) throws Exception {
-        IConfig layoutLayout = layout.getObject("layout");
+    protected void build(XLayElement parent, INode layout) throws Exception {
+        INode layoutLayout = layout.getObject("layout");
         if (layoutLayout == null) return;
 
-        for (IConfig cChild : layoutLayout.getObjects()) {
+        for (INode cChild : layoutLayout.getObjects()) {
             XLayElement child = getActivator().createObject(XLayElement.class, cChild.getName());
             parent.doAppendChild(child, cChild);
             child.setConfig(cChild);

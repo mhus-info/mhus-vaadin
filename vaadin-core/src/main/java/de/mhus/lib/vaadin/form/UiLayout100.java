@@ -21,7 +21,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 
-import de.mhus.lib.core.config.IConfig;
+import de.mhus.lib.core.node.INode;
 import de.mhus.lib.form.ComponentAdapter;
 import de.mhus.lib.form.ComponentDefinition;
 import de.mhus.lib.form.UiComponent;
@@ -221,7 +221,7 @@ public class UiLayout100 extends UiLayout {
     public static class Adapter implements ComponentAdapter {
 
         @Override
-        public UiComponent createAdapter(IConfig config) {
+        public UiComponent createAdapter(INode config) {
             return new UiLayout100();
         }
 

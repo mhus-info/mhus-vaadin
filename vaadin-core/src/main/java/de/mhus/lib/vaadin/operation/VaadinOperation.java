@@ -17,14 +17,14 @@ package de.mhus.lib.vaadin.operation;
 
 import com.vaadin.ui.Component;
 
-import de.mhus.lib.core.config.IConfig;
+import de.mhus.lib.core.node.INode;
 import de.mhus.lib.core.operation.Operation;
 import de.mhus.lib.core.operation.OperationResult;
 import de.mhus.lib.vaadin.DialogControl;
 
 public interface VaadinOperation extends Operation {
 
-    Component createEditor(IConfig editorProperties, DialogControl control);
+    Component createEditor(INode editorProperties, DialogControl control);
 
-    OperationResult doExecute(IConfig editorProperties, Component editor) throws Exception;
+    OperationResult doExecute(INode editorProperties, Component editor) throws Exception;
 }

@@ -17,7 +17,7 @@ package de.mhus.lib.vaadin.layouter;
 
 import com.vaadin.ui.HorizontalSplitPanel;
 
-import de.mhus.lib.core.config.IConfig;
+import de.mhus.lib.core.node.INode;
 import de.mhus.lib.errors.MException;
 
 public class XLayHorizontalSplit extends HorizontalSplitPanel implements XLayElement {
@@ -26,12 +26,12 @@ public class XLayHorizontalSplit extends HorizontalSplitPanel implements XLayEle
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void setConfig(IConfig config) throws MException {
+    public void setConfig(INode config) throws MException {
         LayUtil.configure(this, config);
     }
 
     @Override
-    public void doAppendChild(XLayElement child, IConfig cChild) {
+    public void doAppendChild(XLayElement child, INode cChild) {
         if (getFirstComponent() == null) setFirstComponent(child);
         else setSecondComponent(child);
     }

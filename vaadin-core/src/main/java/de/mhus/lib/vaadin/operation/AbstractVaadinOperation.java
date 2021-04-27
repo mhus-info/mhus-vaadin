@@ -17,7 +17,7 @@ package de.mhus.lib.vaadin.operation;
 
 import com.vaadin.ui.Component;
 
-import de.mhus.lib.core.config.IConfig;
+import de.mhus.lib.core.node.INode;
 import de.mhus.lib.core.operation.AbstractOperation;
 import de.mhus.lib.core.operation.DefaultTaskContext;
 import de.mhus.lib.core.operation.OperationDescription;
@@ -28,7 +28,7 @@ import de.mhus.lib.vaadin.DialogControl;
 public abstract class AbstractVaadinOperation extends AbstractOperation implements VaadinOperation {
 
     @Override
-    public Component createEditor(IConfig editorProperties, DialogControl control) {
+    public Component createEditor(INode editorProperties, DialogControl control) {
         AbstractVaadinOperationEditor editor = createEditor();
         if (editor == null) return null;
         editor.setSizeFull();
@@ -48,7 +48,7 @@ public abstract class AbstractVaadinOperation extends AbstractOperation implemen
     protected abstract OperationResult doExecute2(TaskContext context) throws Exception;
 
     @Override
-    public OperationResult doExecute(IConfig editorProperties, Component editor) throws Exception {
+    public OperationResult doExecute(INode editorProperties, Component editor) throws Exception {
         if (editor != null && (editor instanceof AbstractVaadinOperationEditor))
             ((AbstractVaadinOperationEditor) editor).fillOperationParameters(editorProperties);
 
