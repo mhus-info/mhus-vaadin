@@ -51,7 +51,7 @@ public class VaadinFormBuilder extends MLog implements IUiBuilder {
 
     private void build(UiLayout layout, INode model) throws Exception {
 
-        for (INode node : model.getArrayOrCreate(INode.NAMELESS_VALUE)) {
+        for (INode node : model.getArrayOrCreate("element")) {
             String name = node.getName();
             if (name.equals("element")) name = node.getString("type");
 

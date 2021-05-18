@@ -330,7 +330,12 @@ public class DesktopUi extends UI implements InternalDesktopApi {
                                 "id",
                                 tracerId,
                                 "url",
-                                request.getRequestURL());
+                                request.getRequestURL(),
+                                "query",
+                                request.getQueryString(),
+                                "method",
+                                request.getMethod()
+                                );
         getSession().setAttribute("_tracer_scope", scope);
         subjectSet(getSession());
     }
