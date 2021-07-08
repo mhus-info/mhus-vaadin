@@ -15,9 +15,13 @@
  */
 package de.mhus.lib.vaadin.desktop;
 
+import com.vaadin.ui.MenuBar.MenuItem;
+
 public interface GuiLifecycle {
 
     void doInitialize();
 
     void doDestroy();
+
+    void doCreateMenu(MenuItem[] menu);
 }

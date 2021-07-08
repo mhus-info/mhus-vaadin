@@ -31,7 +31,10 @@ public abstract class SimpleGuiSpace extends MLog implements GuiSpaceService {
     }
 
     @Override
-    public void createMenu(AbstractComponent space, MenuItem[] menu) {}
+    public void createMenu(AbstractComponent space, MenuItem[] menu) {
+        if (space != null && space instanceof GuiLifecycle)
+            ((GuiLifecycle)space).doCreateMenu(menu);
+    }
 
     @Override
     public boolean isHiddenSpace() {
