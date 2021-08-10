@@ -129,8 +129,12 @@ $desktop-background-image: "img/3466156670_c43832505e_o.jpg" !default;
       height: $menubar-height;
       
       .v-menubar-menuitem-right {
-      	float: right;
-	  }
+        float: right;
+      }
+      .v-menubar-menuitem-right, x:-moz-any-link, x:default {
+        float: right;
+        margin-top: -$menubar-height + 2;
+      }
     }
     
     .leftmenu {
