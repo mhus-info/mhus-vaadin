@@ -64,13 +64,6 @@ $desktop-background-image: "img/3466156670_c43832505e_o.jpg" !default;
 
 @import "../valo/valo.scss";
 
-@-moz-document url-prefix() {
-	.desktoptheme .desktop-screen .menubar .v-menubar-menuitem-right {
-		float: right;
-		margin-top: -31px;
-	}
-}
-
 @mixin desktoptheme {
   @include valo;
 
