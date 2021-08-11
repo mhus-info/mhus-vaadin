@@ -304,13 +304,14 @@ public class DesktopUi extends UI implements InternalDesktopApi {
     // role.trim().toLowerCase());
     //    }
 
-//    @Override
-//    public boolean hasWriteAccess(String role) {
-//        if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return false;
-//
-//        return Aaa.isPermitted(
-//                SimpleGuiSpace.class.getCanonicalName(), "write", role.toLowerCase());
-//    }
+    //    @Override
+    //    public boolean hasWriteAccess(String role) {
+    //        if (role == null || accessControl == null || !accessControl.isUserSignedIn()) return
+    // false;
+    //
+    //        return Aaa.isPermitted(
+    //                SimpleGuiSpace.class.getCanonicalName(), "write", role.toLowerCase());
+    //    }
 
     public Account getCurrentUser() {
         return VaadinAccessControl.getUserAccount(getSession());
@@ -334,8 +335,7 @@ public class DesktopUi extends UI implements InternalDesktopApi {
                                 "query",
                                 request.getQueryString(),
                                 "method",
-                                request.getMethod()
-                                );
+                                request.getMethod());
         getSession().setAttribute("_tracer_scope", scope);
         subjectSet(getSession());
     }
@@ -385,11 +385,21 @@ public class DesktopUi extends UI implements InternalDesktopApi {
 
     @Override
     public boolean hasAccess(Class<? extends SimpleGuiSpace> space, String role) {
-        return Aaa.hasAccess(GuiSpaceService.class.getCanonicalName() + ":" + Aaa.normalize(role) + ":" + space.getCanonicalName() );
+        return Aaa.hasAccess(
+                GuiSpaceService.class.getCanonicalName()
+                        + ":"
+                        + Aaa.normalize(role)
+                        + ":"
+                        + space.getCanonicalName());
     }
 
     @Override
     public boolean hasAccess(SimpleGuiSpace space, String role) {
-        return Aaa.hasAccess(GuiSpaceService.class.getCanonicalName() + ":" + Aaa.normalize(role) + ":" + space.getName() );
+        return Aaa.hasAccess(
+                GuiSpaceService.class.getCanonicalName()
+                        + ":"
+                        + Aaa.normalize(role)
+                        + ":"
+                        + space.getName());
     }
 }

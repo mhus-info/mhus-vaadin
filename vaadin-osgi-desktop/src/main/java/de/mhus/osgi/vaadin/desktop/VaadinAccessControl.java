@@ -58,8 +58,7 @@ public class VaadinAccessControl extends MLog implements AccessControl {
 
         try {
             Subject subject = M.l(AccessApi.class).createSubject();
-            if (!Aaa.login(subject, username, password, true, session.getLocale()))
-                return false;
+            if (!Aaa.login(subject, username, password, true, session.getLocale())) return false;
             session.setAttribute(ATTR_SUBJECT, subject);
             session.setAttribute(ATTR_NAME, username);
 

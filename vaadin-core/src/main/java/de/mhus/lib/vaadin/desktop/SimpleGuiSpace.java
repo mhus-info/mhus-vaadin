@@ -33,7 +33,7 @@ public abstract class SimpleGuiSpace extends MLog implements GuiSpaceService {
     @Override
     public void createMenu(AbstractComponent space, MenuItem[] menu) {
         if (space != null && space instanceof GuiLifecycle)
-            ((GuiLifecycle)space).doCreateMenu(menu);
+            ((GuiLifecycle) space).doCreateMenu(menu);
     }
 
     @Override
@@ -65,5 +65,4 @@ public abstract class SimpleGuiSpace extends MLog implements GuiSpaceService {
     public HelpContext createHelpContext(Locale locale) {
         return null;
     }
-
 }

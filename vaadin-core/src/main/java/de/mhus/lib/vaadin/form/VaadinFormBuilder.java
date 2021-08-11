@@ -61,8 +61,7 @@ public class VaadinFormBuilder extends MLog implements IUiBuilder {
             layout.createRow((UiVaadin) comp);
 
             String nn = node.getString("name", null);
-            if (nn != null)
-                index.put(nn, (UiVaadin) comp);
+            if (nn != null) index.put(nn, (UiVaadin) comp);
 
             UiLayout nextLayout = ((UiVaadin) comp).getLayout();
             if (nextLayout != null) build(nextLayout, (INode) node);

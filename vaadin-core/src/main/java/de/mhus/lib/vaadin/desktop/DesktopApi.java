@@ -30,5 +30,4 @@ public interface DesktopApi extends GuiApi {
     boolean hasAccess(Class<? extends SimpleGuiSpace> space, String role);
 
     boolean hasAccess(SimpleGuiSpace space, String role);
-
 }
