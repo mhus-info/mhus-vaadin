@@ -30,7 +30,7 @@
     <packaging>pom</packaging>
   <name>MHUS Vaadin Tools</name>
   <description>A set of tools to improve Vaadin framework</description>
-  <url>http://www.mhus.de</url>
+  <url>http://www.mhus.info</url>
 
     <properties>
         <mhus-vaadin.version>${project.version}</mhus-vaadin.version>
@@ -86,8 +86,8 @@
     </license>
   </licenses>
   <scm>
-    <url>https://github.com/mhus/mhus-sop</url>
-    <connection>scm:git:https://github.com/mhus/mhus-sop</connection>
+    <url>https://github.com/mhus-info/mhus-sop</url>
+    <connection>scm:git:https://github.com/mhus-info/mhus-sop</connection>
   </scm>
   <developers>
     <developer>
