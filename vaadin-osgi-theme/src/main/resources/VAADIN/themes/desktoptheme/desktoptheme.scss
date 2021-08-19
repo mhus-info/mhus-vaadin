@@ -60,7 +60,7 @@ $v-layout-spacing-vertical: round($v-unit-size / 1.8) !default;
 $v-layout-spacing-horizontal: round($v-unit-size / 1.8) !default;
 
 $menubar-height: 33px;
-$desktop-background-image: "img/3466156670_c43832505e_o.jpg" !default;
+// $desktop-background-image: "img/3466156670_c43832505e_o.jpg" !default;
 
 @import "../valo/valo.scss";
 
@@ -107,6 +107,7 @@ $desktop-background-image: "img/3466156670_c43832505e_o.jpg" !default;
     }
     width: 100%;
     height: 100%;
+    background-color:#EEE;
     
     .help-panel {
     	background-color:#FFF;

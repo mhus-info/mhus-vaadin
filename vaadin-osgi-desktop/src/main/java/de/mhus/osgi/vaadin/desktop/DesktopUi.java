@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.subject.Subject;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -44,6 +45,7 @@ import de.mhus.lib.core.aaa.SubjectEnvironment;
 import de.mhus.lib.core.cfg.CfgBoolean;
 import de.mhus.lib.core.cfg.CfgString;
 import de.mhus.lib.core.logging.ITracer;
+import de.mhus.lib.core.logging.MLogUtil;
 import de.mhus.lib.core.security.AccessControl;
 import de.mhus.lib.core.security.Account;
 import de.mhus.lib.vaadin.desktop.Desktop;
@@ -169,23 +171,36 @@ public class DesktopUi extends UI implements InternalDesktopApi {
         //        accessControl = new VaadinAccessControl(CFG_REALM.value());
         accessControl = new VaadinAccessControl();
 
-        if (!accessControl.isUserSignedIn()) {
-            setContent(
-                    new LoginScreen(
-                            accessControl,
-                            new LoginScreen.LoginListener() {
-                                private static final long serialVersionUID = 1L;
-
-                                @Override
-                                public void loginSuccessful() {
-                                    showMainView();
-                                }
-                            }) {
-                        private static final long serialVersionUID = 1L;
-                    });
-        } else {
-            showMainView();
+        try {
+            if (!accessControl.isUserSignedIn()) {
+                showLoginScreen();
+            } else {
+                showMainView();
+            }
+        } catch (UnknownSessionException use) {
+            MLogUtil.log().d(use);
+            try {
+                accessControl.signOut();
+            } catch (Throwable t) {}
+            Aaa.subjectCleanup();
+            showLoginScreen();
         }
+    }
+
+    private void showLoginScreen() {
+        setContent(
+                new LoginScreen(
+                        accessControl,
+                        new LoginScreen.LoginListener() {
+                            private static final long serialVersionUID = 1L;
+
+                            @Override
+                            public void loginSuccessful() {
+                                showMainView();
+                            }
+                        }) {
+                    private static final long serialVersionUID = 1L;
+                });
     }
 
     private void showMainView() {
