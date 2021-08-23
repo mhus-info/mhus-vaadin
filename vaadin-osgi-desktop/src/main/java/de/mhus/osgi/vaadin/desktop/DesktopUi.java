@@ -387,7 +387,7 @@ public class DesktopUi extends UI implements InternalDesktopApi {
 
     public void setTracing(boolean activate) {
         if (activate) {
-            this.tracerId = UUID.randomUUID().toString().replaceAll("-", "");
+            this.tracerId = UUID.randomUUID().toString().substring(30,36);
         } else {
             this.tracerId = null;
         }

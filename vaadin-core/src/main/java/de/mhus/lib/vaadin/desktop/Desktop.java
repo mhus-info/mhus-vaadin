@@ -237,6 +237,7 @@ public class Desktop extends CssLayout implements MNlsProvider {
         } catch (Throwable t) {
             log.t(t);
         }
+
         menuUser.setText(name == null ? "?" : name);
 
         menuSpaces.removeChildren();
