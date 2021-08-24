@@ -401,7 +401,7 @@ public class Desktop extends CssLayout implements MNlsProvider {
         return space.getDisplayName(locale);
     }
 
-    protected void showOverview(boolean setLinking) {
+    public void showOverview(boolean setLinking) {
         if (menuLeave != null) menuLeave.setEnabled(false);
         contentScreen.removeAllComponents();
         cleanupMenu();

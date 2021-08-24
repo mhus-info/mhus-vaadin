@@ -39,7 +39,9 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+import de.mhus.lib.core.MDate;
 import de.mhus.lib.core.MString;
+import de.mhus.lib.core.MSystem;
 import de.mhus.lib.core.aaa.Aaa;
 import de.mhus.lib.core.aaa.SubjectEnvironment;
 import de.mhus.lib.core.cfg.CfgBoolean;
@@ -48,6 +50,10 @@ import de.mhus.lib.core.logging.ITracer;
 import de.mhus.lib.core.logging.MLogUtil;
 import de.mhus.lib.core.security.AccessControl;
 import de.mhus.lib.core.security.Account;
+import de.mhus.lib.core.util.MNls;
+import de.mhus.lib.core.util.MNlsProvider;
+import de.mhus.lib.vaadin.InfoDialog;
+import de.mhus.lib.vaadin.TextInputDialog;
 import de.mhus.lib.vaadin.desktop.Desktop;
 import de.mhus.lib.vaadin.desktop.DesktopApi;
 import de.mhus.lib.vaadin.desktop.GuiSpaceService;
@@ -90,6 +96,7 @@ public class DesktopUi extends UI implements InternalDesktopApi {
                     private static final long serialVersionUID = 1L;
                     private MenuItem menuTrace;
                     //			private Refresher refresher;
+                    private MenuItem menuDoAs;
 
                     @SuppressWarnings("deprecation")
                     @Override
@@ -128,9 +135,10 @@ public class DesktopUi extends UI implements InternalDesktopApi {
                         //        		});
                         //        		addExtension(refresher);
 
+                        final MNlsProvider nlsProvider = this;
                         menuTrace =
                                 menuUser.addItem(
-                                        "Trace An",
+                                        MNls.find(nlsProvider, "menu.startTrace=Start trace"),
                                         new MenuBar.Command() {
                                             private static final long serialVersionUID = 1L;
 
@@ -139,13 +147,60 @@ public class DesktopUi extends UI implements InternalDesktopApi {
                                                 if (getTracerId() == null) {
                                                     setTracing(true);
                                                     menuTrace.setText(
-                                                            "Trace Aus (" + getTracerId() + ")");
+                                                            MNls.find(nlsProvider, "menu.stopTrace=Stop trace") + " (" + getTracerId() + ")");
+                                                    InfoDialog.show(getUI(),
+                                                            MNls.find(nlsProvider, 
+                                                                    "menu.traceInfoTitle=Trace information"),
+                                                                    tracerId + "," + MDate.toIsoDateTime(new Date()) + "," + MSystem.getHostname());
                                                 } else {
                                                     setTracing(false);
-                                                    menuTrace.setText("Trace An");
+                                                    menuTrace.setText(MNls.find(nlsProvider, "menu.startTrace=Start trace"));
                                                 }
                                             }
                                         });
+                        if (Aaa.hasAccess(Desktop.class,"action.doas",null)) {
+                            menuDoAs = menuUser.addItem(
+                                    MNls.find(nlsProvider, "menu.doAs=Do as"),
+                                    new MenuBar.Command() {
+                                        private static final long serialVersionUID = 1L;
+    
+                                        @Override
+                                        public void menuSelected(MenuItem selectedItem) {
+                                            TextInputDialog.show(getUI(), 
+                                                    MNls.find(nlsProvider, "menu.doAsTitle=Do as"),
+                                                    "",
+                                                    MNls.find(nlsProvider, "menu.doAsText=Name of the user"),
+                                                    MNls.find(nlsProvider, "menu.doAsOk=Ok"),
+                                                    MNls.find(nlsProvider, "menu.doAsCancel=Cancel"),
+                                                    new TextInputDialog.Listener() {
+
+                                                        @Override
+                                                        public boolean validate(String txtInput) {
+                                                            return MString.isSetTrim(txtInput);
+                                                        }
+
+                                                        @Override
+                                                        public void onClose(TextInputDialog dialog) {
+                                                            if (dialog.isConfirmed()) {
+                                                                // it's a hack
+                                                                String username = dialog.getInputText().trim();
+                                                                Subject subject = Aaa.createSubjectWithoutCheck( username );
+                                                                getSession().setAttribute(VaadinAccessControl.ATTR_SUBJECT, subject);
+                                                                getSession().setAttribute(VaadinAccessControl.ATTR_NAME, username);
+                                                                DesktopUi.subjectSet(getSession());
+                                                                try (SubjectEnvironment env = Aaa.asSubject(subject)) {
+                                                                    desktop.refreshSpaceList();
+                                                                    desktop.showOverview(true);
+                                                                }
+                                                                menuDoAs.setEnabled(false);
+                                                            }
+                                                        }
+                                                    }
+                                                    );
+                                        }
+                                    }
+                                    );
+                        }
                     }
 
                     //        	protected void doTick() {
@@ -388,6 +443,9 @@ public class DesktopUi extends UI implements InternalDesktopApi {
     public void setTracing(boolean activate) {
         if (activate) {
             this.tracerId = UUID.randomUUID().toString().substring(30,36);
+            try (Scope scope2 =
+                    ITracer.get().enter("tracing " + Aaa.getPrincipal(),tracerId,"id",tracerId) ) {
+            }
         } else {
             this.tracerId = null;
         }

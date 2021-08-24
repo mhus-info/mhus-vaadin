@@ -1,74 +1,47 @@
-/**
- * Copyright (C) 2019 Mike Hummel (mh@mhus.de)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package de.mhus.lib.vaadin;
 
-import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.TextArea;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 public class InfoDialog extends ModalDialog {
 
-    /** */
     private static final long serialVersionUID = 1L;
+    private String title;
+    private String info;
+    private String textHeight = "50px";
 
-    private Action cancel;
-    private String message;
-    private Listener listener;
-    protected Label label;
-
-    public InfoDialog(String title, String message, String txtCancel, Listener listener)
-            throws Exception {
-
-        this.message = message;
-        this.listener = listener;
-        cancel = new Action("cancel", txtCancel);
-        actions = new Action[] {cancel};
-        setPack(true);
-        initUI();
-        setCaption(title);
+    public InfoDialog(String title, String info) {
+        this.title = title;
+        this.info = info;
+        actions = new Action[] {CLOSE};
     }
 
-    public Label getLabel() {
-        return label;
+    public InfoDialog(String title, String info, String textHeight) {
+        this.title = title;
+        this.info = info;
+        this.textHeight = textHeight;
     }
 
     @Override
     protected void initContent(VerticalLayout layout) throws Exception {
-        label = new Label(message);
-        label.setContentMode(ContentMode.HTML);
-        layout.addComponent(label);
+        setCaption(title);
+        TextArea text = new TextArea();
+        text.setEnabled(false);
+        text.setValue(info);
+        text.setHeight(textHeight);
     }
 
     @Override
     protected boolean doAction(Action action) {
-        if (listener != null) listener.onClose(this);
         return true;
     }
 
-    public static void show(
-            UI ui, String title, String message, String txtCancel, Listener listener) {
+    public static void show(UI ui, String title, String info) {
         try {
-            new InfoDialog(title, message, txtCancel, listener).show(ui);
+            new InfoDialog(title, info).show(ui);
         } catch (Exception e) {
         }
     }
 
-    public static interface Listener {
-
-        public void onClose(InfoDialog dialog);
-    }
 }
