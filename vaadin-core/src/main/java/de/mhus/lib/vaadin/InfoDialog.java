@@ -28,7 +28,7 @@ public class InfoDialog extends ModalDialog {
         pack = true;
         setCaption(title);
         TextArea text = new TextArea();
-        text.setEnabled(false);
+        text.setEnabled(true);
         text.setValue(info);
         text.setHeight(textHeight);
         text.setWidth("100%");
