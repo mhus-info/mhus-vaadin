@@ -25,11 +25,13 @@ public class InfoDialog extends ModalDialog {
 
     @Override
     protected void initContent(VerticalLayout layout) throws Exception {
+        pack = true;
         setCaption(title);
         TextArea text = new TextArea();
         text.setEnabled(false);
         text.setValue(info);
         text.setHeight(textHeight);
+        text.setWidth("100%");
     }
 
     @Override

@@ -66,6 +66,7 @@ public class TextInputDialog extends ModalDialog {
 
     @Override
     protected void initContent(VerticalLayout layout) throws Exception {
+        pack = true;
         label = new Label(message);
         label.setContentMode(ContentMode.HTML);
         layout.addComponent(label);
