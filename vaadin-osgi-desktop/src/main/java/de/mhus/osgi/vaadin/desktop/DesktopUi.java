@@ -186,15 +186,18 @@ public class DesktopUi extends UI implements InternalDesktopApi {
                                                             if (dialog.isConfirmed()) {
                                                                 // it's a hack
                                                                 String username = dialog.getInputText().trim();
-                                                                Subject subject = Aaa.createSubjectWithoutCheck( username );
-                                                                getSession().setAttribute(VaadinAccessControl.ATTR_SUBJECT, subject);
-                                                                getSession().setAttribute(VaadinAccessControl.ATTR_NAME, username);
-                                                                DesktopUi.subjectSet(getSession());
-                                                                try (SubjectEnvironment env = Aaa.asSubject(subject)) {
-                                                                    desktop.refreshSpaceList();
-                                                                    desktop.showOverview(true);
+                                                                try (Scope scope2 =
+                                                                        ITracer.get().enter("doas " + Aaa.getPrincipal(),tracerId,"id",tracerId,"username",username) ) {
+                                                                    Subject subject = Aaa.createSubjectWithoutCheck( username );
+                                                                    getSession().setAttribute(VaadinAccessControl.ATTR_SUBJECT, subject);
+                                                                    getSession().setAttribute(VaadinAccessControl.ATTR_NAME, username);
+                                                                    DesktopUi.subjectSet(getSession());
+                                                                    try (SubjectEnvironment env = Aaa.asSubject(subject)) {
+                                                                        desktop.refreshSpaceList();
+                                                                        desktop.showOverview(true);
+                                                                    }
+                                                                    menuDoAs.setEnabled(false);
                                                                 }
-                                                                menuDoAs.setEnabled(false);
                                                             }
                                                         }
                                                     }

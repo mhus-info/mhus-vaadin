@@ -39,7 +39,9 @@ public class InfoDialog extends ModalDialog {
 
     public static void show(UI ui, String title, String info) {
         try {
-            new InfoDialog(title, info).show(ui);
+            InfoDialog dialog = new InfoDialog(title, info);
+            dialog.initUI();
+            dialog.show(ui);
         } catch (Exception e) {
         }
     }
