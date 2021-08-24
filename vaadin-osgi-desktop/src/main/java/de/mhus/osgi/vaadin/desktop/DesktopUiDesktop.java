@@ -88,7 +88,7 @@ public class DesktopUiDesktop extends Desktop {
         if (activate) {
             this.tracerId = UUID.randomUUID().toString().substring(30,36);
             try (Scope scope2 =
-                    ITracer.get().enter("tracing " + Aaa.getPrincipal(),tracerId,"id",tracerId) ) {
+                    ITracer.get().enter("tracing " + Aaa.getPrincipal(),"id",tracerId) ) {
             }
         } else {
             this.tracerId = null;
@@ -157,7 +157,7 @@ public class DesktopUiDesktop extends Desktop {
                                                     // it's a hack
                                                     String username = dialog.getInputText().trim();
                                                     try (Scope scope2 =
-                                                            ITracer.get().enter("doas " + Aaa.getPrincipal(),tracerId,"id",tracerId,"username",username) ) {
+                                                            ITracer.get().enter("doas " + Aaa.getPrincipal(),"id",tracerId,"username",username) ) {
                                                         Subject subject = Aaa.createSubjectWithoutCheck( username );
                                                         getSession().setAttribute(VaadinAccessControl.ATTR_SUBJECT, subject);
                                                         getSession().setAttribute(VaadinAccessControl.ATTR_NAME, username);
