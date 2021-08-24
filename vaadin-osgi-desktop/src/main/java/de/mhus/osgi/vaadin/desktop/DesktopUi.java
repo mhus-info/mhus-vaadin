@@ -136,28 +136,30 @@ public class DesktopUi extends UI implements InternalDesktopApi {
                         //        		addExtension(refresher);
 
                         final MNlsProvider nlsProvider = this;
-                        menuTrace =
-                                menuUser.addItem(
-                                        MNls.find(nlsProvider, "menu.startTrace=Start trace"),
-                                        new MenuBar.Command() {
-                                            private static final long serialVersionUID = 1L;
-
-                                            @Override
-                                            public void menuSelected(MenuItem selectedItem) {
-                                                if (getTracerId() == null) {
-                                                    setTracing(true);
-                                                    menuTrace.setText(
-                                                            MNls.find(nlsProvider, "menu.stopTrace=Stop trace") + " (" + getTracerId() + ")");
-                                                    InfoDialog.show(getUI(),
-                                                            MNls.find(nlsProvider, 
-                                                                    "menu.traceInfoTitle=Trace information"),
-                                                                    tracerId + "," + MDate.toIsoDateTime(new Date()) + "," + MSystem.getHostname());
-                                                } else {
-                                                    setTracing(false);
-                                                    menuTrace.setText(MNls.find(nlsProvider, "menu.startTrace=Start trace"));
+                        if (Aaa.hasAccess(Desktop.class,"action.trace",null)) {
+                            menuTrace =
+                                    menuUser.addItem(
+                                            MNls.find(nlsProvider, "menu.startTrace=Start trace"),
+                                            new MenuBar.Command() {
+                                                private static final long serialVersionUID = 1L;
+    
+                                                @Override
+                                                public void menuSelected(MenuItem selectedItem) {
+                                                    if (getTracerId() == null) {
+                                                        setTracing(true);
+                                                        menuTrace.setText(
+                                                                MNls.find(nlsProvider, "menu.stopTrace=Stop trace") + " (" + getTracerId() + ")");
+                                                        InfoDialog.show(getUI(),
+                                                                MNls.find(nlsProvider, 
+                                                                        "menu.traceInfoTitle=Trace information"),
+                                                                        tracerId + "," + MDate.toIsoDateTime(new Date()) + "," + MSystem.getHostname());
+                                                    } else {
+                                                        setTracing(false);
+                                                        menuTrace.setText(MNls.find(nlsProvider, "menu.startTrace=Start trace"));
+                                                    }
                                                 }
-                                            }
-                                        });
+                                            });
+                        }
                         if (Aaa.hasAccess(Desktop.class,"action.doas",null)) {
                             menuDoAs = menuUser.addItem(
                                     MNls.find(nlsProvider, "menu.doAs=Do as"),
