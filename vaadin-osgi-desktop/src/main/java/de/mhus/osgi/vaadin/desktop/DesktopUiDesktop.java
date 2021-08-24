@@ -178,6 +178,7 @@ public class DesktopUiDesktop extends Desktop {
             } else
                 menuDoAs.setEnabled(true);
         } else
+        if (menuDoAs != null)
             menuDoAs.setEnabled(false);
     }
 
