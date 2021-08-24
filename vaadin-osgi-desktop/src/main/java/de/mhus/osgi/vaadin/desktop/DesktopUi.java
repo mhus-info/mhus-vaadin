@@ -15,9 +15,7 @@
  */
 package de.mhus.osgi.vaadin.desktop;
 
-import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,29 +31,18 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-import de.mhus.lib.core.MDate;
 import de.mhus.lib.core.MString;
-import de.mhus.lib.core.MSystem;
 import de.mhus.lib.core.aaa.Aaa;
 import de.mhus.lib.core.aaa.SubjectEnvironment;
-import de.mhus.lib.core.cfg.CfgBoolean;
 import de.mhus.lib.core.cfg.CfgString;
 import de.mhus.lib.core.logging.ITracer;
 import de.mhus.lib.core.logging.MLogUtil;
 import de.mhus.lib.core.security.AccessControl;
 import de.mhus.lib.core.security.Account;
-import de.mhus.lib.core.util.MNls;
-import de.mhus.lib.core.util.MNlsProvider;
-import de.mhus.lib.vaadin.InfoDialog;
-import de.mhus.lib.vaadin.TextInputDialog;
-import de.mhus.lib.vaadin.desktop.Desktop;
-import de.mhus.lib.vaadin.desktop.DesktopApi;
 import de.mhus.lib.vaadin.desktop.GuiSpaceService;
 import de.mhus.lib.vaadin.desktop.SimpleGuiSpace;
 import de.mhus.lib.vaadin.login.LoginScreen;
@@ -66,7 +53,6 @@ import io.opentracing.Scope;
 @Widgetset(value = "com.vaadin.v7.Vaadin7WidgetSet")
 public class DesktopUi extends UI implements InternalDesktopApi {
 
-    private static CfgBoolean CFG_GEEK_MODE = new CfgBoolean(DesktopApi.class, "geek", false);
     private static CfgString CFG_TRACE_ACTIVE =
             new CfgString(DesktopUi.class, "traceActivation", "");
 
@@ -77,11 +63,10 @@ public class DesktopUi extends UI implements InternalDesktopApi {
 
     //	private static CfgString CFG_REALM = new CfgString(SopUi.class, "realm", "karaf");
     //    private static Log log = Log.getLog(SopUi.class);
-    private Desktop desktop;
+    private DesktopUiDesktop desktop;
     private AccessControl accessControl;
     private ServiceTracker<GuiSpaceService, GuiSpaceService> spaceTracker;
     private BundleContext context;
-    private String tracerId = null;
 
     private String startNav;
     private String host;
@@ -92,126 +77,7 @@ public class DesktopUi extends UI implements InternalDesktopApi {
         startNav = UI.getCurrent().getPage().getUriFragment();
 
         desktop =
-                new Desktop(this) {
-                    private static final long serialVersionUID = 1L;
-                    private MenuItem menuTrace;
-                    //			private Refresher refresher;
-                    private MenuItem menuDoAs;
-
-                    @SuppressWarnings("deprecation")
-                    @Override
-                    protected void initGui() {
-                        super.initGui();
-
-                        if (CFG_GEEK_MODE.value()) {
-                            String part = UI.getCurrent().getPage().getUriFragment();
-                            Date now = new Date();
-                            if ("geek_easter".equals(part)
-                                    || now.getMonth() == 3
-                                            && (now.getDate() >= 10 && now.getDate() <= 17))
-                                addStyleName("desktop-easter");
-                            if ("geek_towel".equals(part)
-                                    || now.getMonth() == 4 && now.getDate() == 25)
-                                addStyleName("desktop-towel");
-                            if ("geek_yoda".equals(part)
-                                    || now.getMonth() == 4 && now.getDate() == 21)
-                                addStyleName("desktop-yoda");
-                            if ("geek_pirate".equals(part)
-                                    || now.getMonth() == 8 && now.getDate() == 19)
-                                addStyleName("desktop-pirate");
-                            if ("geek_suit".equals(part)
-                                    || now.getMonth() == 9 && now.getDate() == 13)
-                                addStyleName("desktop-suit");
-                        }
-
-                        //        		refresher = new Refresher();
-                        //        		refresher.setRefreshInterval(1000);
-                        //        		refresher.addListener(new Refresher.RefreshListener() {
-                        //					private static final long serialVersionUID = 1L;
-                        //					@Override
-                        //        			public void refresh(Refresher source) {
-                        //        				doTick();
-                        //        			}
-                        //        		});
-                        //        		addExtension(refresher);
-
-                        final MNlsProvider nlsProvider = this;
-                        if (Aaa.hasAccess(Desktop.class,"action.trace",null)) {
-                            menuTrace =
-                                    menuUser.addItem(
-                                            MNls.find(nlsProvider, "menu.startTrace=Start trace"),
-                                            new MenuBar.Command() {
-                                                private static final long serialVersionUID = 1L;
-    
-                                                @Override
-                                                public void menuSelected(MenuItem selectedItem) {
-                                                    if (getTracerId() == null) {
-                                                        setTracing(true);
-                                                        menuTrace.setText(
-                                                                MNls.find(nlsProvider, "menu.stopTrace=Stop trace") + " (" + getTracerId() + ")");
-                                                        InfoDialog.show(getUI(),
-                                                                MNls.find(nlsProvider, 
-                                                                        "menu.traceInfoTitle=Trace information"),
-                                                                        tracerId + "," + MDate.toIsoDateTime(new Date()) + "," + MSystem.getHostname());
-                                                    } else {
-                                                        setTracing(false);
-                                                        menuTrace.setText(MNls.find(nlsProvider, "menu.startTrace=Start trace"));
-                                                    }
-                                                }
-                                            });
-                        }
-                        if (Aaa.hasAccess(Desktop.class,"action.doas",null)) {
-                            menuDoAs = menuUser.addItem(
-                                    MNls.find(nlsProvider, "menu.doAs=Do as"),
-                                    new MenuBar.Command() {
-                                        private static final long serialVersionUID = 1L;
-    
-                                        @Override
-                                        public void menuSelected(MenuItem selectedItem) {
-                                            TextInputDialog.show(getUI(), 
-                                                    MNls.find(nlsProvider, "menu.doAsTitle=Do as"),
-                                                    "",
-                                                    MNls.find(nlsProvider, "menu.doAsText=Name of the user"),
-                                                    MNls.find(nlsProvider, "menu.doAsOk=Ok"),
-                                                    MNls.find(nlsProvider, "menu.doAsCancel=Cancel"),
-                                                    new TextInputDialog.Listener() {
-
-                                                        @Override
-                                                        public boolean validate(String txtInput) {
-                                                            return MString.isSetTrim(txtInput);
-                                                        }
-
-                                                        @Override
-                                                        public void onClose(TextInputDialog dialog) {
-                                                            if (dialog.isConfirmed()) {
-                                                                // it's a hack
-                                                                String username = dialog.getInputText().trim();
-                                                                try (Scope scope2 =
-                                                                        ITracer.get().enter("doas " + Aaa.getPrincipal(),tracerId,"id",tracerId,"username",username) ) {
-                                                                    Subject subject = Aaa.createSubjectWithoutCheck( username );
-                                                                    getSession().setAttribute(VaadinAccessControl.ATTR_SUBJECT, subject);
-                                                                    getSession().setAttribute(VaadinAccessControl.ATTR_NAME, username);
-                                                                    DesktopUi.subjectSet(getSession());
-                                                                    try (SubjectEnvironment env = Aaa.asSubject(subject)) {
-                                                                        desktop.refreshSpaceList();
-                                                                        desktop.showOverview(true);
-                                                                    }
-                                                                    menuDoAs.setEnabled(false);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    );
-                                        }
-                                    }
-                                    );
-                        }
-                    }
-
-                    //        	protected void doTick() {
-                    //
-                    //        	}
-                };
+                new DesktopUiDesktop(this);
 
         VerticalLayout content = new VerticalLayout();
         setContent(content);
@@ -264,6 +130,7 @@ public class DesktopUi extends UI implements InternalDesktopApi {
     }
 
     private void showMainView() {
+        desktop.refreshMenu();
         addStyleName(ValoTheme.UI_WITH_MENU);
         setContent(desktop);
         desktop.refreshSpaceList();
@@ -398,6 +265,8 @@ public class DesktopUi extends UI implements InternalDesktopApi {
     }
 
     public void requestBegin(HttpServletRequest request) {
+        subjectSet(getSession());
+        String tracerId = desktop.getTracerId();
         Scope scope =
                 ITracer.get()
                         .start(
@@ -412,16 +281,14 @@ public class DesktopUi extends UI implements InternalDesktopApi {
                                 "method",
                                 request.getMethod());
         getSession().setAttribute("_tracer_scope", scope);
-        subjectSet(getSession());
     }
 
     public void requestEnd() {
 
         Scope scope = (Scope) getSession().getAttribute("_tracer_scope");
+        if (scope != null) scope.close();
 
         subjectRemove(getSession());
-
-        if (scope != null) scope.close();
     }
 
     protected static void subjectSet(VaadinSession session) {
@@ -438,21 +305,6 @@ public class DesktopUi extends UI implements InternalDesktopApi {
         if (env != null) {
             session.setAttribute(VaadinAccessControl.ATTR_CONTEXT, null);
             env.close();
-        }
-    }
-
-    public String getTracerId() {
-        return tracerId;
-    }
-
-    public void setTracing(boolean activate) {
-        if (activate) {
-            this.tracerId = UUID.randomUUID().toString().substring(30,36);
-            try (Scope scope2 =
-                    ITracer.get().enter("tracing " + Aaa.getPrincipal(),tracerId,"id",tracerId) ) {
-            }
-        } else {
-            this.tracerId = null;
         }
     }
 
