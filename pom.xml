@@ -26,7 +26,7 @@
     </parent>
     <groupId>de.mhus.vaadin</groupId>
     <artifactId>mhus-vaadin</artifactId>
-    <version>7.4.0-SNAPSHOT</version>
+    <version>7.3.3</version>
     <packaging>pom</packaging>
   <name>MHUS Vaadin Tools</name>
   <description>A set of tools to improve Vaadin framework</description>
