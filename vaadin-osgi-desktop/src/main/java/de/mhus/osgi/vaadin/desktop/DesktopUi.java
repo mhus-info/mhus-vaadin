@@ -76,8 +76,7 @@ public class DesktopUi extends UI implements InternalDesktopApi {
 
         startNav = UI.getCurrent().getPage().getUriFragment();
 
-        desktop =
-                new DesktopUiDesktop(this);
+        desktop = new DesktopUiDesktop(this);
 
         VerticalLayout content = new VerticalLayout();
         setContent(content);
@@ -107,7 +106,8 @@ public class DesktopUi extends UI implements InternalDesktopApi {
             MLogUtil.log().d(use);
             try {
                 accessControl.signOut();
-            } catch (Throwable t) {}
+            } catch (Throwable t) {
+            }
             Aaa.subjectCleanup();
             showLoginScreen();
         }

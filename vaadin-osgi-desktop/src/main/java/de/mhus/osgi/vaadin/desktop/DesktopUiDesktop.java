@@ -1,3 +1,18 @@
+/**
+ * Copyright (C) 2019 Mike Hummel (mh@mhus.de)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.mhus.osgi.vaadin.desktop;
 
 import java.util.Date;
@@ -49,20 +64,15 @@ public class DesktopUiDesktop extends Desktop {
             String part = UI.getCurrent().getPage().getUriFragment();
             Date now = new Date();
             if ("geek_easter".equals(part)
-                    || now.getMonth() == 3
-                            && (now.getDate() >= 10 && now.getDate() <= 17))
+                    || now.getMonth() == 3 && (now.getDate() >= 10 && now.getDate() <= 17))
                 addStyleName("desktop-easter");
-            if ("geek_towel".equals(part)
-                    || now.getMonth() == 4 && now.getDate() == 25)
+            if ("geek_towel".equals(part) || now.getMonth() == 4 && now.getDate() == 25)
                 addStyleName("desktop-towel");
-            if ("geek_yoda".equals(part)
-                    || now.getMonth() == 4 && now.getDate() == 21)
+            if ("geek_yoda".equals(part) || now.getMonth() == 4 && now.getDate() == 21)
                 addStyleName("desktop-yoda");
-            if ("geek_pirate".equals(part)
-                    || now.getMonth() == 8 && now.getDate() == 19)
+            if ("geek_pirate".equals(part) || now.getMonth() == 8 && now.getDate() == 19)
                 addStyleName("desktop-pirate");
-            if ("geek_suit".equals(part)
-                    || now.getMonth() == 9 && now.getDate() == 13)
+            if ("geek_suit".equals(part) || now.getMonth() == 9 && now.getDate() == 13)
                 addStyleName("desktop-suit");
         }
 
@@ -77,7 +87,6 @@ public class DesktopUiDesktop extends Desktop {
         //              });
         //              addExtension(refresher);
 
-
     }
 
     public String getTracerId() {
@@ -86,10 +95,9 @@ public class DesktopUiDesktop extends Desktop {
 
     public void setTracing(boolean activate) {
         if (activate) {
-            this.tracerId = UUID.randomUUID().toString().substring(30,36);
+            this.tracerId = UUID.randomUUID().toString().substring(30, 36);
             try (Scope scope2 =
-                    ITracer.get().enter("tracing " + Aaa.getPrincipal(),"id",tracerId) ) {
-            }
+                    ITracer.get().enter("tracing " + Aaa.getPrincipal(), "id", tracerId)) {}
         } else {
             this.tracerId = null;
         }
@@ -98,88 +106,117 @@ public class DesktopUiDesktop extends Desktop {
     public void refreshMenu() {
 
         final MNlsProvider nlsProvider = this;
-        if (Aaa.hasAccess(Desktop.class,"action.trace",null)) {
+        if (Aaa.hasAccess(Desktop.class, "action.trace", null)) {
             if (menuTrace == null) {
                 menuTrace =
                         menuUser.addItem(
                                 MNls.find(nlsProvider, "menu.startTrace=Start trace"),
                                 new MenuBar.Command() {
                                     private static final long serialVersionUID = 1L;
-    
+
                                     @Override
                                     public void menuSelected(MenuItem selectedItem) {
                                         if (getTracerId() == null) {
                                             setTracing(true);
                                             menuTrace.setText(
-                                                    MNls.find(nlsProvider, "menu.stopTrace=Stop trace") + " (" + getTracerId() + ")");
-                                            InfoDialog.show(getUI(),
-                                                    MNls.find(nlsProvider, 
+                                                    MNls.find(
+                                                                    nlsProvider,
+                                                                    "menu.stopTrace=Stop trace")
+                                                            + " ("
+                                                            + getTracerId()
+                                                            + ")");
+                                            InfoDialog.show(
+                                                    getUI(),
+                                                    MNls.find(
+                                                            nlsProvider,
                                                             "menu.traceInfoTitle=Trace information"),
-                                                            tracerId + "," + MDate.toIsoDateTime(new Date()) + "," + MSystem.getHostname());
+                                                    tracerId
+                                                            + ","
+                                                            + MDate.toIsoDateTime(new Date())
+                                                            + ","
+                                                            + MSystem.getHostname());
                                         } else {
                                             setTracing(false);
-                                            menuTrace.setText(MNls.find(nlsProvider, "menu.startTrace=Start trace"));
+                                            menuTrace.setText(
+                                                    MNls.find(
+                                                            nlsProvider,
+                                                            "menu.startTrace=Start trace"));
                                         }
                                     }
                                 });
-            } else
-                menuTrace.setEnabled(true);
-        } else
-        if (menuTrace != null)
-            menuTrace.setEnabled(false);
-        
-        
-        if (Aaa.hasAccess(Desktop.class,"action.doas",null)) {
+            } else menuTrace.setEnabled(true);
+        } else if (menuTrace != null) menuTrace.setEnabled(false);
+
+        if (Aaa.hasAccess(Desktop.class, "action.doas", null)) {
             if (menuDoAs == null) {
-                menuDoAs = menuUser.addItem(
-                        MNls.find(nlsProvider, "menu.doAs=Do as"),
-                        new MenuBar.Command() {
-                            private static final long serialVersionUID = 1L;
-    
-                            @Override
-                            public void menuSelected(MenuItem selectedItem) {
-                                TextInputDialog.show(getUI(), 
-                                        MNls.find(nlsProvider, "menu.doAsTitle=Do as"),
-                                        "",
-                                        MNls.find(nlsProvider, "menu.doAsText=Name of the user"),
-                                        MNls.find(nlsProvider, "menu.doAsOk=Ok"),
-                                        MNls.find(nlsProvider, "menu.doAsCancel=Cancel"),
-                                        new TextInputDialog.Listener() {
-    
-                                            @Override
-                                            public boolean validate(String txtInput) {
-                                                return MString.isSetTrim(txtInput);
-                                            }
-    
-                                            @Override
-                                            public void onClose(TextInputDialog dialog) {
-                                                if (dialog.isConfirmed()) {
-                                                    // it's a hack
-                                                    String username = dialog.getInputText().trim();
-                                                    try (Scope scope2 =
-                                                            ITracer.get().enter("doas " + Aaa.getPrincipal(),"id",tracerId,"username",username) ) {
-                                                        Subject subject = Aaa.createSubjectWithoutCheck( username );
-                                                        getSession().setAttribute(VaadinAccessControl.ATTR_SUBJECT, subject);
-                                                        getSession().setAttribute(VaadinAccessControl.ATTR_NAME, username);
-                                                        DesktopUi.subjectSet(getSession());
-                                                        try (SubjectEnvironment env = Aaa.asSubject(subject)) {
-                                                            refreshSpaceList();
-                                                            refreshMenu();
-                                                            showOverview(true);
+                menuDoAs =
+                        menuUser.addItem(
+                                MNls.find(nlsProvider, "menu.doAs=Do as"),
+                                new MenuBar.Command() {
+                                    private static final long serialVersionUID = 1L;
+
+                                    @Override
+                                    public void menuSelected(MenuItem selectedItem) {
+                                        TextInputDialog.show(
+                                                getUI(),
+                                                MNls.find(nlsProvider, "menu.doAsTitle=Do as"),
+                                                "",
+                                                MNls.find(
+                                                        nlsProvider,
+                                                        "menu.doAsText=Name of the user"),
+                                                MNls.find(nlsProvider, "menu.doAsOk=Ok"),
+                                                MNls.find(nlsProvider, "menu.doAsCancel=Cancel"),
+                                                new TextInputDialog.Listener() {
+
+                                                    @Override
+                                                    public boolean validate(String txtInput) {
+                                                        return MString.isSetTrim(txtInput);
+                                                    }
+
+                                                    @Override
+                                                    public void onClose(TextInputDialog dialog) {
+                                                        if (dialog.isConfirmed()) {
+                                                            // it's a hack
+                                                            String username =
+                                                                    dialog.getInputText().trim();
+                                                            try (Scope scope2 =
+                                                                    ITracer.get()
+                                                                            .enter(
+                                                                                    "doas "
+                                                                                            + Aaa
+                                                                                                    .getPrincipal(),
+                                                                                    "id",
+                                                                                    tracerId,
+                                                                                    "username",
+                                                                                    username)) {
+                                                                Subject subject =
+                                                                        Aaa
+                                                                                .createSubjectWithoutCheck(
+                                                                                        username);
+                                                                getSession()
+                                                                        .setAttribute(
+                                                                                VaadinAccessControl
+                                                                                        .ATTR_SUBJECT,
+                                                                                subject);
+                                                                getSession()
+                                                                        .setAttribute(
+                                                                                VaadinAccessControl
+                                                                                        .ATTR_NAME,
+                                                                                username);
+                                                                DesktopUi.subjectSet(getSession());
+                                                                try (SubjectEnvironment env =
+                                                                        Aaa.asSubject(subject)) {
+                                                                    refreshSpaceList();
+                                                                    refreshMenu();
+                                                                    showOverview(true);
+                                                                }
+                                                            }
                                                         }
                                                     }
-                                                }
-                                            }
-                                        }
-                                        );
-                            }
-                        }
-                        );
-            } else
-                menuDoAs.setEnabled(true);
-        } else
-        if (menuDoAs != null)
-            menuDoAs.setEnabled(false);
+                                                });
+                                    }
+                                });
+            } else menuDoAs.setEnabled(true);
+        } else if (menuDoAs != null) menuDoAs.setEnabled(false);
     }
-
 }
