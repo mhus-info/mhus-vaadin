@@ -265,6 +265,7 @@ public class DesktopUi extends UI implements InternalDesktopApi {
     }
 
     public void requestBegin(HttpServletRequest request) {
+        Aaa.subjectCleanup();
         subjectSet(getSession());
         String tracerId = desktop.getTracerId();
         Scope scope =
@@ -279,15 +280,19 @@ public class DesktopUi extends UI implements InternalDesktopApi {
                                 "query",
                                 request.getQueryString(),
                                 "method",
-                                request.getMethod());
+                                request.getMethod(),
+                                "remote",
+                                request.getRemoteAddr()
+                                );
         getSession().setAttribute("_tracer_scope", scope);
     }
 
     public void requestEnd() {
 
-        Scope scope = (Scope) getSession().getAttribute("_tracer_scope");
-        if (scope != null) scope.close();
-
+        try {
+            Scope scope = (Scope) getSession().getAttribute("_tracer_scope");
+            if (scope != null) scope.close();
+        } catch (Throwable t) {}
         subjectRemove(getSession());
     }
 
@@ -300,12 +305,15 @@ public class DesktopUi extends UI implements InternalDesktopApi {
     }
 
     protected static void subjectRemove(VaadinSession session) {
-        SubjectEnvironment env =
-                (SubjectEnvironment) session.getAttribute(VaadinAccessControl.ATTR_CONTEXT);
-        if (env != null) {
-            session.setAttribute(VaadinAccessControl.ATTR_CONTEXT, null);
-            env.close();
-        }
+        try {
+            SubjectEnvironment env =
+                    (SubjectEnvironment) session.getAttribute(VaadinAccessControl.ATTR_CONTEXT);
+            if (env != null) {
+                    session.setAttribute(VaadinAccessControl.ATTR_CONTEXT, null);
+                    env.close();
+            }
+        } catch (Throwable t) {}
+        Aaa.subjectCleanup();
     }
 
     @Override
