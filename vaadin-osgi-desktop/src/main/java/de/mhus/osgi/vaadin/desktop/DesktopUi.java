@@ -36,6 +36,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import de.mhus.lib.core.MString;
+import de.mhus.lib.core.MThread;
 import de.mhus.lib.core.aaa.Aaa;
 import de.mhus.lib.core.aaa.SubjectEnvironment;
 import de.mhus.lib.core.cfg.CfgString;
@@ -108,7 +109,7 @@ public class DesktopUi extends UI implements InternalDesktopApi {
                 accessControl.signOut();
             } catch (Throwable t) {
             }
-            Aaa.subjectCleanup();
+            MThread.cleanup();
             showLoginScreen();
         }
     }
@@ -265,7 +266,7 @@ public class DesktopUi extends UI implements InternalDesktopApi {
     }
 
     public void requestBegin(HttpServletRequest request) {
-        Aaa.subjectCleanup();
+        MThread.cleanup();
         subjectSet(getSession());
         String tracerId = desktop.getTracerId();
         Scope scope =
@@ -313,7 +314,7 @@ public class DesktopUi extends UI implements InternalDesktopApi {
                     env.close();
             }
         } catch (Throwable t) {}
-        Aaa.subjectCleanup();
+        MThread.cleanup();
     }
 
     @Override
