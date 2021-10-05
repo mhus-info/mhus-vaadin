@@ -283,8 +283,7 @@ public class DesktopUi extends UI implements InternalDesktopApi {
                                 "method",
                                 request.getMethod(),
                                 "remote",
-                                request.getRemoteAddr()
-                                );
+                                request.getRemoteAddr());
         getSession().setAttribute("_tracer_scope", scope);
     }
 
@@ -293,7 +292,8 @@ public class DesktopUi extends UI implements InternalDesktopApi {
         try {
             Scope scope = (Scope) getSession().getAttribute("_tracer_scope");
             if (scope != null) scope.close();
-        } catch (Throwable t) {}
+        } catch (Throwable t) {
+        }
         subjectRemove(getSession());
     }
 
@@ -310,10 +310,11 @@ public class DesktopUi extends UI implements InternalDesktopApi {
             SubjectEnvironment env =
                     (SubjectEnvironment) session.getAttribute(VaadinAccessControl.ATTR_CONTEXT);
             if (env != null) {
-                    session.setAttribute(VaadinAccessControl.ATTR_CONTEXT, null);
-                    env.close();
+                session.setAttribute(VaadinAccessControl.ATTR_CONTEXT, null);
+                env.close();
             }
-        } catch (Throwable t) {}
+        } catch (Throwable t) {
+        }
         MThread.cleanup();
     }
 
