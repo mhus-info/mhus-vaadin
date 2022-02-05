@@ -21,6 +21,7 @@ import org.apache.shiro.authz.AuthorizationException;
 
 import com.vaadin.ui.AbstractComponent;
 
+import de.mhus.lib.basics.RC;
 import de.mhus.lib.core.MLog;
 import de.mhus.lib.core.MString;
 import de.mhus.lib.core.aaa.Aaa;
@@ -53,7 +54,7 @@ public abstract class AbstractGuiSpace extends MLog implements GuiSpaceService {
                 AbstractComponent impl = (AbstractComponent) clazz.getConstructor().newInstance();
                 return impl;
             } catch (Exception e) {
-                throw new MRuntimeException(e);
+                throw new MRuntimeException(RC.STATUS.ERROR,  e);
             }
         }
         return null;
