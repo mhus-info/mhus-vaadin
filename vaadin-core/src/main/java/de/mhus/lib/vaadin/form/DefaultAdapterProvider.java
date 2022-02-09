@@ -89,7 +89,7 @@ public class DefaultAdapterProvider extends ActivatorAdapterProvider {
                     Class<?> clazz = from.getClazz(className);
                     a.addMap(name, clazz);
                 } catch (Exception e) {
-                    MLogUtil.log().e(mapping, e);
+                    MLogUtil.log().e("add map failed", mapping, e);
                 }
             }
         } else {

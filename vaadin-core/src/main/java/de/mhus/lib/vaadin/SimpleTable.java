@@ -80,17 +80,17 @@ public class SimpleTable extends ExpandingTable {
     @SuppressWarnings("unchecked")
     public void addRow(Object id, Object... values) {
         if (id == null) {
-            MLogUtil.log().d(this.getClass(), "addRow: id is null");
+            MLogUtil.log().d("addRow: id is null", this.getClass());
             return;
         }
         Item item = dataSource.addItem(id);
         if (item == null) {
-            MLogUtil.log().d(this.getClass(), "addRow: item is null", id);
+            MLogUtil.log().d("addRow: item is null", this.getClass(), id);
             return;
         }
         for (int i = 0; i < columns.length; i++) {
             if (columns[i] == null) {
-                MLogUtil.log().d(this.getClass(), "addRow: column is null", i);
+                MLogUtil.log().d("addRow: column is null", this.getClass(), i);
                 return;
             }
             item.getItemProperty(columns[i].getId())

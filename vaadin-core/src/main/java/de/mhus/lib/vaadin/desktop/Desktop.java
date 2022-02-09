@@ -267,7 +267,7 @@ public class Desktop extends CssLayout implements MNlsProvider {
                         || !space.hasAccess(getApi().getAccessControl())) continue;
                 componentList.add(space);
             } catch (Throwable t) {
-                log.d(space, t);
+                log.d("add space failed", space, t);
             }
         }
 
